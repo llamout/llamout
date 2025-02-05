@@ -1,0 +1,35 @@
+{
+  "name": "web",
+  "version": "0.0.1",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@instantdb/admin": "^0.17.12",
+    "@instantdb/core": "^0.17.12",
+    "@instantdb/react": "^0.17.12",
+    "@vercel/analytics": "^1.4.1",
+    "@workspace/ui": "workspace:*",
+    "clsx": "^2.1.1",
+    "lucide-react": "0.456.0",
+    "next": "^15.1.0",
+    "next-themes": "^0.4.3",
+    "react-dom": "^19.0.0",
+    "tailwind-merge": "^2.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "18.3.0",
+    "@types/react-dom": "18.3.1",
+    "@workspace/eslint-config": "workspace:^",
+    "@workspace/typescript-config": "workspace:*",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}
