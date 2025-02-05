@@ -34,9 +34,9 @@ const plans = [
       { value: 'Early Access.', included: true },
     ],
     button: {
-      target: '_self',
-      cta: 'Get started',
-      link: '/checkout',
+      target: '_blank',
+      cta: 'Get in touch',
+      link: 'https://heyform.net/f/yKjhjaro',
     },
   },
 ];
