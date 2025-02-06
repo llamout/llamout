@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Analytics } from '@vercel/analytics/react';
 
+import { Toaster } from '@workspace/ui/components/toaster';
+
 import { siteConfig } from '@/config/site';
 
 import './globals.css';
@@ -53,6 +55,7 @@ export default function RootLayout({
       </head>
       <body className={`antialiased`}>
         {children}
+        <Toaster />
         <Analytics />
       </body>
     </html>
