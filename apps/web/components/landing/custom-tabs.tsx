@@ -1,8 +1,15 @@
 'use client';
 
+import { Badge } from '@workspace/ui/components/badge';
 import { useState, useRef, useEffect } from 'react';
 
-export function CustomTabs({ tabs, onChange }: { tabs: string[]; onChange: (value: number) => any }) {
+export function CustomTabs({
+  tabs,
+  onChange,
+}: {
+  tabs: { id: number; name: string; active: boolean }[];
+  onChange: (value: number) => any;
+}) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [hoverStyle, setHoverStyle] = useState({});
@@ -69,17 +76,26 @@ export function CustomTabs({ tabs, onChange }: { tabs: string[]; onChange: (valu
           <div
             key={index}
             ref={(el: any) => (tabRefs.current[index] = el)}
-            className={`w-full px-3 py-4 cursor-pointer transition-colors duration-300 h-[30px] ${
+            className={`w-full px-3 py-4 transition-colors duration-300 h-[30px] ${
               index === activeIndex ? 'text-text' : 'text-muted-foreground'
-            }`}
-            onMouseEnter={() => setHoveredIndex(index)}
-            onMouseLeave={() => setHoveredIndex(null)}
-            onClick={() => {
-              onChange(index);
-              setActiveIndex(index);
+            } ${tab?.active && 'cursor-pointer'}`}
+            onMouseEnter={() => {
+              tab?.active && setHoveredIndex(index);
             }}
+            onMouseLeave={() => {
+              tab?.active && setHoveredIndex(null);
+            }}
+            onClick={() => {
+              if (tab?.active) {
+                onChange(index);
+                setActiveIndex(index);
+              }
+            }}
+            aria-disabled={tab?.active}
           >
-            <div className='flex items-center justify-center h-full text-sm font-semibold'>{tab}</div>
+            <div className='flex items-center justify-center gap-2 h-full text-sm font-semibold'>
+              {tab?.name} {!tab?.active && <Badge variant='outline'>Soon</Badge>}
+            </div>
           </div>
         ))}
       </div>
