@@ -1,11 +1,14 @@
 import type { Metadata } from 'next';
 import { Analytics } from '@vercel/analytics/react';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 import { Toaster } from '@workspace/ui/components/toaster';
 
 import { siteConfig } from '@/config/site';
 
 import './globals.css';
+
+const GOOGLE_ANALYTICS = process.env.GOOGLE_ANALYTICS || '';
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || ''),
@@ -57,6 +60,7 @@ export default function RootLayout({
         {children}
         <Toaster />
         <Analytics />
+        <GoogleAnalytics gaId={GOOGLE_ANALYTICS} />
       </body>
     </html>
   );
