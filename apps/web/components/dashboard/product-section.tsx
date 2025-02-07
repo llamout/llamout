@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Eye, MoreHorizontal } from 'lucide-react';
+import { Eye, MoreHorizontal, PackageSearch } from 'lucide-react';
 
 import { Button } from '@workspace/ui/components/button';
 import {
@@ -95,7 +95,10 @@ export function ProductSection() {
         {/* Product */}
         {PRODUCTS?.length === 0 ? (
           <div className='flex flex-col items-center justify-center gap-4 w-full py-8 bg-white border border-dashed rounded-lg'>
-            <div className='flex flex-col gap-2 text-center'>
+            <div className='flex flex-col items-center gap-2 text-center'>
+              <div className='flex justify-center items-center w-12 h-12 bg-gradient-to-t from-background to-transparent border rounded-lg shadow-sm text-muted-foreground'>
+                <PackageSearch className='size-6' />
+              </div>
               <h3 className='text-lg'>There's nothing to see here yet.</h3>
               <p className='text-sm text-muted-foreground'>Get started by creating your first product</p>
             </div>

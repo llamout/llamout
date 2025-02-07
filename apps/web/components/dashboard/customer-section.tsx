@@ -1,3 +1,4 @@
+import { ContactRound } from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -58,9 +59,14 @@ export function CustomerSection() {
       <div className='flex flex-col gap-2 w-full'>
         {CUSTOMERS?.length === 0 ? (
           <div className='flex flex-col items-center justify-center gap-4 w-full py-8 bg-white border border-dashed rounded-lg'>
-            <div className='flex flex-col gap-2 text-center'>
-              <h3 className='text-lg'>There's nothing to see here yet.</h3>
-              <p className='text-sm text-muted-foreground'>Lorem ipsum dolor sit amet.</p>
+            <div className='flex flex-col items-center gap-2 text-center'>
+              <div className='flex justify-center items-center w-12 h-12 bg-gradient-to-t from-background to-transparent border rounded-lg shadow-sm text-muted-foreground'>
+                <ContactRound className='size-6' />
+              </div>
+              <h3 className='text-lg'>No active customers</h3>
+              <p className='text-sm text-muted-foreground'>
+                Active customers linked to this product will be listed here.
+              </p>
             </div>
           </div>
         ) : (
