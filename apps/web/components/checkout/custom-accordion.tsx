@@ -221,7 +221,7 @@ interface CustomAccordion {
 }
 
 export function CustomAccordion(props: CustomAccordion) {
-  const { store, product, quantity, readOnly } = props;
+  const { store, product, quantity, readOnly = false } = props;
 
   const [activeStep, setActiveStep] = useState<Step>('information');
   const [completedSteps, setCompletedSteps] = useState<Step[]>([]);
