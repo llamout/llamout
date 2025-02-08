@@ -1,11 +1,12 @@
 'use client';
 
-import { BadgeCheck, LogOut } from 'lucide-react';
+import { useParams } from 'next/navigation';
+import { init } from '@instantdb/react';
+import { LogOut } from 'lucide-react';
 
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -14,14 +15,33 @@ import {
 import { Skeleton } from '@workspace/ui/components/skeleton';
 import { Button } from '@workspace/ui/components/button';
 
-export function NavStore({
-  store,
-}: {
-  store?: {
-    name: string;
-    image: string;
+const APP_ID = process.env.INSTANTDB_KEY || '';
+const db = init({ appId: APP_ID });
+
+export function NavStore() {
+  const params = useParams<{ id: string }>();
+
+  const { user } = db.useAuth();
+
+  const query = {
+    store: {
+      $: {
+        where: {
+          id: params?.id,
+          user_id: user?.id || '',
+        },
+      },
+    },
   };
-}) {
+
+  const { data } = db.useQuery(query);
+
+  if (!user || data?.store?.length === 0) {
+    return <Skeleton className='w-8 h-8 bg-gray-200 rounded-full' />;
+  }
+
+  const store = data?.store[0];
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
