@@ -59,7 +59,7 @@ const DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivEleme
 DialogHeader.displayName = 'DialogHeader';
 
 const DialogBody = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn('overflow-x-scroll sm:max-h-[520px] p-6 pt-0', className)} {...props} />
+  <div className={cn('overflow-x-scroll h-full sm:max-h-[520px] p-6 pt-0', className)} {...props} />
 );
 DialogBody.displayName = 'DialogBody';
 
