@@ -6,6 +6,13 @@
   ],
   "tasks": {
     "build": {
+      "env": [
+        "NEXT_PUBLIC_APP_URL",
+        "NEXT_PUBLIC_GOOGLE_ANALYTICS",
+        "INSTANTDB_APP_ID",
+        "INSTANTDB_ADMIN_ID",
+        "USEPLUNK_BEARER_TOKEN"
+      ],
       "dependsOn": [
         "^build"
       ],
@@ -31,6 +38,13 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "web#build": {
+      "env": [
+        "NEXT_PUBLIC_APP_URL",
+        "NEXT_PUBLIC_GOOGLE_ANALYTICS",
+        "INSTANTDB_APP_ID"
+      ]
     }
   }
 }
