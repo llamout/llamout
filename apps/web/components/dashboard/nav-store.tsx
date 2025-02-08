@@ -14,9 +14,7 @@ import {
 } from '@workspace/ui/components/dropdown-menu';
 import { Skeleton } from '@workspace/ui/components/skeleton';
 import { Button } from '@workspace/ui/components/button';
-
-const APP_ID = process.env.INSTANTDB_KEY || '';
-const db = init({ appId: APP_ID });
+import { db } from '@/lib/database';
 
 export function NavStore() {
   const params = useParams<{ id: string }>();

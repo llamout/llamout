@@ -15,9 +15,7 @@ import { Badge } from '@workspace/ui/components/badge';
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '@workspace/ui/components/input-otp';
 
 import { CustomTabs } from './landing/custom-tabs';
-
-const APP_ID = process.env.INSTANTDB_KEY || '';
-const db = init({ appId: APP_ID });
+import { db } from '@/lib/database';
 
 const tabs = [
   { id: 1, name: 'Email', active: true },

@@ -11,9 +11,7 @@ import { addStore } from '@/actions/store';
 
 import { LoginForm } from '@/components/login-form';
 import { StoreStep } from '@/components/onboarding/store';
-
-const APP_ID = process.env.INSTANTDB_KEY || '';
-const db = init({ appId: APP_ID });
+import { db } from '@/lib/database';
 
 export default function Page() {
   const router = useRouter();
