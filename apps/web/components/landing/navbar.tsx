@@ -57,9 +57,9 @@ export function Navbar() {
               </Button>
             ))}
           </div>
-          <div className=''>
+          <div className='block sm:hidden'>
             <Button asChild>
-              <Link href='/auth'>Get Started</Link>
+              <Link href='https://heyform.net/f/yKjhjaro'>Get in touch</Link>
             </Button>
           </div>
 
