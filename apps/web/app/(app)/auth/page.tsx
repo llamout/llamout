@@ -8,8 +8,8 @@ import { LoginForm } from '@/components/login-form';
 import { Button } from '@workspace/ui/components/button';
 import Link from 'next/link';
 
-const APP_ID = process.env.INSTANTDB_KEY || '';
-const db = init({ appId: APP_ID });
+const APP_ID = process.env.INSTANTDB_KEY || process.env.INSTANTDB_APP_ID;
+const db = init({ appId: String(APP_ID) });
 
 export default function Page() {
   const router = useRouter();
