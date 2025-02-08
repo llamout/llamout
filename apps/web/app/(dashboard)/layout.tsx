@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 import { siteConfig } from '@/config/site';
 
-import { NavUser } from '@/components/dashboard/nav-user';
+import { NavStore } from '@/components/dashboard/nav-store';
 
 export const metadata: Metadata = {
   title: {
@@ -29,9 +29,12 @@ export default function RootLayout({
               <h1 className='text-md'>llamout</h1>
             </div>
 
-            <div className='flex items-center gap-2'>
-              <NavUser />
-            </div>
+            <NavStore
+              store={{
+                name: 'AlignUI Design System',
+                image: 'https://pbs.twimg.com/profile_images/1859209210761818112/4LKQZTCY_400x400.jpg',
+              }}
+            />
           </div>
         </header>
         <div className='flex flex-1 flex-col gap-8 w-full max-w-2xl mx-auto mt-16 p-4 md:py-8'>{children}</div>
