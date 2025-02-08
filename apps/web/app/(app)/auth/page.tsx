@@ -16,8 +16,32 @@ export default function Page() {
 
   const { isLoading, error, user } = db.useAuth();
 
+  // Get Store
+  const queryStore = {
+    store: {
+      $: {
+        where: {
+          user_id: user?.id || '',
+        },
+      },
+    },
+  };
+
+  const { data: dataStore, isLoading: isLoadingStore } = db.useQuery(queryStore);
+  const hasStore = dataStore?.store[0];
+
+  // TO-DO
+  if (isLoadingStore) {
+    return <>Buscando datos...</>;
+  }
+
+  if (hasStore?.id) {
+    router.push(`/dashboard/${hasStore?.id}`);
+    return;
+  }
+
   if (user) {
-    router.push('/dashboard');
+    router.push('/onboarding');
     return;
   }
 
