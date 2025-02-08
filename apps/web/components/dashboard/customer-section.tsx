@@ -47,7 +47,11 @@ function formatDate(timestamp: any) {
   return `${month} ${day}, ${year}`;
 }
 
-export function CustomerSection() {
+export function CustomerSection({
+  data,
+}: {
+  data: { id: string; name: string; email: string; pubkey: string; store: string; created_at: number }[] | any;
+}) {
   return (
     <div className='flex flex-col gap-4'>
       <div className='flex items-center justify-between w-full'>
@@ -57,7 +61,7 @@ export function CustomerSection() {
         </div>
       </div>
       <div className='flex flex-col gap-2 w-full'>
-        {CUSTOMERS?.length === 0 ? (
+        {!data || data?.length === 0 ? (
           <div className='flex flex-col items-center justify-center gap-4 w-full py-8 bg-white border border-dashed rounded-lg'>
             <div className='flex flex-col items-center gap-2 text-center'>
               <div className='flex justify-center items-center w-12 h-12 bg-gradient-to-t from-background to-transparent border rounded-lg shadow-sm text-muted-foreground'>
@@ -72,9 +76,9 @@ export function CustomerSection() {
         ) : (
           <Card>
             <Table>
-              {CUSTOMERS?.length === 0 && (
+              {/* {data?.length === 0 && (
                 <TableCaption className='pb-4'>A list of your recent customers.</TableCaption>
-              )}
+              )} */}
               <TableHeader className='px-4'>
                 <TableRow className=''>
                   <TableHead className='max-w-[100px]'>Pubkey</TableHead>
@@ -85,8 +89,8 @@ export function CustomerSection() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {CUSTOMERS?.length > 0 &&
-                  CUSTOMERS?.map((customer: any) => (
+                {data?.length > 0 &&
+                  data?.map((customer: any) => (
                     <TableRow key={customer?.id}>
                       <TableCell className='overflow-hidden max-w-[100px] text-ellipsis'>
                         {customer?.pubkey ? (
