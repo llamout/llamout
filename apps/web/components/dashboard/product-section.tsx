@@ -31,9 +31,7 @@ import { formatBigNumbers } from '@/lib/number';
 import { addProduct } from '@/actions/product';
 
 import { ProductStep } from '../onboarding/product';
-
-const APP_ID = process.env.INSTANTDB_KEY || '';
-const db = init({ appId: APP_ID });
+import { db } from '@/lib/database';
 
 export function ProductSection({ store_id }: { store_id: string }) {
   const [loading, setLoading] = useState(false);

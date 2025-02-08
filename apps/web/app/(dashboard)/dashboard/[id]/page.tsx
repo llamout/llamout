@@ -12,9 +12,7 @@ import { formatBigNumbers } from '@/lib/number';
 import { ProductSection } from '@/components/dashboard/product-section';
 import { CustomerSection } from '@/components/dashboard/customer-section';
 import { SaleSection } from '@/components/dashboard/sale-section';
-
-const APP_ID = process.env.INSTANTDB_KEY || '';
-const db = init({ appId: APP_ID });
+import { db } from '@/lib/database';
 
 export default function Page() {
   const params = useParams<{ id: string }>();
