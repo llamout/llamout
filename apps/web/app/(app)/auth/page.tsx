@@ -1,15 +1,14 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { init } from '@instantdb/react';
 import { LoaderCircle, ScanFace, ShieldAlert } from 'lucide-react';
 
-import { LoginForm } from '@/components/login-form';
 import { Button } from '@workspace/ui/components/button';
-import Link from 'next/link';
 
-const APP_ID = process.env.INSTANTDB_KEY || process.env.INSTANTDB_APP_ID;
-const db = init({ appId: String(APP_ID) });
+import { db } from '@/lib/database';
+
+import { LoginForm } from '@/components/login-form';
 
 export default function Page() {
   const router = useRouter();
