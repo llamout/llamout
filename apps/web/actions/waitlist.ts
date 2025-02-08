@@ -44,7 +44,7 @@ export async function addWaitlist(props: {
       db?.tx?.waitlist[newId].update({
         email: email ?? null,
         pubkey: pubkey ?? null,
-        createdAt: Date.now(),
+        created_at: Date.now(),
       }),
     );
 
@@ -53,6 +53,31 @@ export async function addWaitlist(props: {
     }
 
     return { error: null, data: newId };
+  } catch (error) {
+    return { error: error, data: null };
+  }
+}
+
+export async function validateWaitlist({ email }: { email: string }): Promise<{ error: any | null; data: any | null }> {
+  // Find if customer exist
+  const query = {
+    waitlist: {
+      $: {
+        where: {
+          email,
+        },
+      },
+    },
+  };
+
+  try {
+    const { waitlist } = await db.query(query);
+
+    if (waitlist && waitlist.length > 0) {
+      return { error: null, data: waitlist[0]?.id };
+    }
+
+    return { error: 'Oops', data: null };
   } catch (error) {
     return { error: error, data: null };
   }

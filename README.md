@@ -5,7 +5,7 @@ An open source payment system built with Next and focused on Bitcoin.
 [![llamout](./public/screenshot.png)](https://llamout.com/)
 
 
-## 🤓 Tech Stack
+## 🤓 Tech Stack 
 
 - Framework: [Next.js](https://nextjs.org/)
 - Database: [Instantdb](https://www.instantdb.com/)

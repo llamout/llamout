@@ -7,7 +7,10 @@ import { CustomTabs } from './custom-tabs';
 import { Button } from '@workspace/ui/components/button';
 import { Input } from '@workspace/ui/components/input';
 
-const tabs = ['Email', 'Nostr'];
+const tabs = [
+  { id: 1, name: 'Email', active: true },
+  { id: 1, name: 'Nostr', active: true },
+];
 
 export function Form(props: any) {
   const [showTab, setShowTab] = useState(0);

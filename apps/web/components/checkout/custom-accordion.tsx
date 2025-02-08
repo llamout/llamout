@@ -1,23 +1,20 @@
 'use client';
 
-import { useState } from 'react';
-// import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { Check, Heart, LoaderCircle } from 'lucide-react';
-// import { QRCodeSVG } from 'qrcode.react';
-// import { CopyToClipboard } from 'react-copy-to-clipboard';
-
-// import { addCustomer } from '@/lib/actions/customer';
-// import { addOrder, modifyOrder } from '@/lib/actions/order';
-// import { generatePayment, listenPayment } from '@/lib/actions/payment';
+import { QRCodeSVG } from 'qrcode.react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { Button } from '@workspace/ui/components/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@workspace/ui/components/accordion';
 import { Label } from '@workspace/ui/components/label';
 import { Input } from '@workspace/ui/components/input';
 import { Skeleton } from '@workspace/ui/components/skeleton';
-
 import { Card, CardContent } from '@workspace/ui/components/card';
-// import { ProductType, StoreType } from '@/types';
+
+import { addOrder, modifyOrder } from '@/actions/order';
+import { generatePayment, listenPayment } from '@/actions/payment';
+import { addCustomer } from '@/actions/customer';
 
 type InformationProps = {
   store: any;
@@ -41,9 +38,9 @@ export function Information({ onComplete, disabled, store }: InformationProps) {
     if (variant === 'email' && (!name || !email)) return;
     if (variant === 'pubkey' && !pubkey) return;
 
-    // const id = await addCustomer({ name, email, pubkey, store_id: String(store?.id) });
+    const id = await addCustomer({ name, email, pubkey, store_id: String(store?.id) });
 
-    // onComplete(id);
+    onComplete(id);
   }
 
   return (
@@ -137,24 +134,23 @@ function Copyable({ value, label }: { value: string; label: string }) {
   const [copyLabel, setCopyLabel] = useState(label);
 
   return (
-    <></>
-    // <CopyToClipboard text={value}>
-    //   <Button
-    //     className='w-full'
-    //     variant='outline'
-    //     onClick={() => {
-    //       setCopyLabel('Copied!');
-    //       setDisabled(true);
-    //       setTimeout(() => {
-    //         setCopyLabel(label);
-    //         setDisabled(false);
-    //       }, 2500);
-    //     }}
-    //     disabled={disabled}
-    //   >
-    //     {copyLabel}
-    //   </Button>
-    // </CopyToClipboard>
+    <CopyToClipboard text={value}>
+      <Button
+        className='w-full'
+        variant='outline'
+        onClick={() => {
+          setCopyLabel('Copied!');
+          setDisabled(true);
+          setTimeout(() => {
+            setCopyLabel(label);
+            setDisabled(false);
+          }, 2500);
+        }}
+        disabled={disabled}
+      >
+        {copyLabel}
+      </Button>
+    </CopyToClipboard>
   );
 }
 
@@ -170,7 +166,15 @@ export function Payment({ invoice, store }: PaymentProps) {
         <CardContent className='pt-6'>
           <div className='flex flex-col items-center gap-4'>
             <div className='p-2 md:p-4 bg-white rounded-lg'>
-              <Skeleton className='w-[260px] h-[260px] bg-black' />
+              {invoice ? (
+                <QRCodeSVG
+                  size={260}
+                  value={invoice}
+                  imageSettings={{ src: store?.image, height: 32, width: 32, excavate: true }}
+                />
+              ) : (
+                <Skeleton className='w-[260px] h-[260px] bg-black' />
+              )}
             </div>
             <p className='text-center text-muted-foreground'>
               Remember to pay with a Bitcoin wallet using Lightning Network.
@@ -221,7 +225,7 @@ interface CustomAccordion {
 }
 
 export function CustomAccordion(props: CustomAccordion) {
-  const { store, product, quantity, readOnly } = props;
+  const { store, product, quantity, readOnly = false } = props;
 
   const [activeStep, setActiveStep] = useState<Step>('information');
   const [completedSteps, setCompletedSteps] = useState<Step[]>([]);
@@ -232,24 +236,24 @@ export function CustomAccordion(props: CustomAccordion) {
 
   const price = product?.price * quantity;
 
-  // useEffect(() => {
-  //   if (orderId && verify) {
-  //     listenPayment({
-  //       verifyUrl: verify,
-  //       intervalMs: 5000,
-  //       maxRetries: 48,
-  //       onPaymentConfirmed: async (isPaid) => {
-  //         if (isPaid) {
-  //           modifyOrder(orderId);
-  //           handleComplete('payment');
-  //         }
-  //       },
-  //       onPaymentFailed: () => {
-  //         console.log('Payment verification failed after maximum retries.');
-  //       },
-  //     });
-  //   }
-  // }, [orderId, verify]);
+  useEffect(() => {
+    if (orderId && verify) {
+      listenPayment({
+        verifyUrl: verify,
+        intervalMs: 5000,
+        maxRetries: 48,
+        onPaymentConfirmed: async (isPaid) => {
+          if (isPaid) {
+            modifyOrder(orderId);
+            handleComplete('payment');
+          }
+        },
+        onPaymentFailed: () => {
+          console.log('Payment verification failed after maximum retries.');
+        },
+      });
+    }
+  }, [orderId, verify]);
 
   const handleComplete = (step: Step) => {
     setCompletedSteps([...completedSteps, step]);
@@ -291,31 +295,34 @@ export function CustomAccordion(props: CustomAccordion) {
           </div>
           {/* {isCompleted('information') && <span className='text-sm text-green-500'>Completed</span>} */}
         </AccordionTrigger>
-        <AccordionContent className='p-4'>
+        <AccordionContent>
           <Information
             store={store}
             disabled={readOnly}
             onComplete={async (id) => {
-              // const _id = await addOrder({
-              //   customer_id: id,
-              //   product_id: String(product?.id),
-              //   amount: price,
-              //   currency: product?.currency,
-              //   quantity,
-              // });
+              const _id = await addOrder({
+                // Relations
+                store_id: String(store?.id),
+                product_id: String(product?.id),
+                customer_id: id,
+                // Data
+                amount: price,
+                currency: product?.currency,
+                quantity,
+              });
 
-              // setOrderId(_id);
+              setOrderId(_id);
               handleComplete('information');
 
               // General Payment
               // TO-DO: Validate LUD16
-              // const data = await generatePayment({
-              //   lightningAddress: store?.lnaddress,
-              //   amount: price,
-              // });
+              const data = await generatePayment({
+                lightningAddress: store?.lnaddress,
+                amount: price,
+              });
 
-              // setInvoice(data?.invoice?.pr);
-              // setVerify(data?.invoice?.verify);
+              setInvoice(data?.invoice?.pr);
+              setVerify(data?.invoice?.verify);
             }}
           />
         </AccordionContent>
@@ -331,7 +338,7 @@ export function CustomAccordion(props: CustomAccordion) {
           </div>
           {/* {isCompleted('payment') && <span className='text-sm text-green-500'>Completed</span>} */}
         </AccordionTrigger>
-        <AccordionContent className='p-4'>
+        <AccordionContent>
           <Payment store={store} invoice={invoice} />
         </AccordionContent>
       </AccordionItem>
@@ -346,7 +353,7 @@ export function CustomAccordion(props: CustomAccordion) {
           </div>
           {/* {isCompleted('summary') && <span className='text-sm text-green-500'>Completed</span>} */}
         </AccordionTrigger>
-        <AccordionContent className='p-4'>
+        <AccordionContent>
           <Summary />
         </AccordionContent>
       </AccordionItem>
