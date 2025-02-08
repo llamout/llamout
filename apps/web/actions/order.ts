@@ -5,6 +5,7 @@ import { id } from '@instantdb/core';
 import { db } from '@/config/instantdb';
 
 interface AddOrder {
+  store_id: any;
   customer_id: any;
   product_id: string;
   amount: number;
@@ -13,9 +14,10 @@ interface AddOrder {
 }
 
 export async function addOrder(props: AddOrder): Promise<string> {
-  const { customer_id, product_id, amount, currency, quantity } = props;
+  const { store_id, customer_id, product_id, amount, currency, quantity } = props;
 
-  if (!product_id) {
+  // TO-DO
+  if (!product_id || !store_id) {
     // return {}
   }
 
@@ -24,8 +26,9 @@ export async function addOrder(props: AddOrder): Promise<string> {
   await db.transact(
     // @ts-ignore
     db.tx.order[newId].update({
-      customer_id,
+      store_id,
       product_id,
+      customer_id,
 
       // Data
       amount: amount ?? null,

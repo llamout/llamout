@@ -45,13 +45,13 @@ export async function addProduct(props: {
   return newId;
 }
 
-export async function getProduct({ product_id }: { product_id: string }): Promise<{ error: any; data: any }> {
+export async function getProduct(hash: string): Promise<{ error: any; data: any }> {
   const queryProduct = {
     product: {
       $: {
         limit: 1,
         where: {
-          id: product_id,
+          hash,
         },
       },
     },

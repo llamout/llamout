@@ -27,9 +27,6 @@ export async function addStore(props: {
       website: website ?? null,
       lnaddress: lnaddress ?? null,
 
-      success_url: '',
-      submit_type: '',
-
       // Status
       created_at: Date.now(),
       updated_at: Date.now(),
@@ -38,4 +35,30 @@ export async function addStore(props: {
   );
 
   return newId;
+}
+
+export async function getStore({ user_id }: { user_id: string }): Promise<{ error: any; data: any }> {
+  // TO-DO
+  if (!user_id) {
+    return { error: 'User required', data: null };
+  }
+
+  const queryStore = {
+    store: {
+      $: {
+        limit: 1,
+        where: {
+          id: user_id,
+        },
+      },
+    },
+  };
+
+  try {
+    const { store } = await db.query(queryStore);
+
+    return { error: null, data: store };
+  } catch (error) {
+    return { error, data: null };
+  }
 }
