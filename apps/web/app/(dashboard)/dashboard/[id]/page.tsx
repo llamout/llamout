@@ -1,5 +1,6 @@
 'use client';
 
+import { useParams } from 'next/navigation';
 import { init } from '@instantdb/react';
 import { BadgeDollarSign, Contact, ReceiptText } from 'lucide-react';
 
@@ -16,17 +17,62 @@ const APP_ID = process.env.INSTANTDB_KEY || '';
 const db = init({ appId: APP_ID });
 
 export default function Page() {
-  const query = { order: {}, customer: {} };
+  const params = useParams<{ id: string }>();
 
-  const { isLoading, error, data } = db.useQuery(query);
+  const { user } = db.useAuth();
 
-  console.log('data', data);
+  // Get Store
+  const queryStore = {
+    store: {
+      $: {
+        where: {
+          id: params?.id || '',
+          user_id: user?.id || '',
+        },
+      },
+    },
+  };
 
-  if (error || !data) {
-    return <>Oops, {error}</>;
+  const { data: dataStore } = db.useQuery(queryStore);
+  const store = dataStore?.store[0];
+
+  // Get data for dashboard
+  const queryDashboard = {
+    customer: {
+      $: {
+        where: {
+          store_id: store?.id || '',
+        },
+      },
+    },
+    order: {
+      $: {
+        where: {
+          store_id: store?.id || '',
+        },
+      },
+    },
+  };
+
+  const { data: dataDashboard } = db.useQuery(queryDashboard);
+
+  if (!user) {
+    return <>Cargando usuario</>;
   }
 
-  const { order, customer } = data;
+  if (!store) {
+    return <>Cargando tienda</>;
+  }
+
+  if (!dataDashboard) {
+    return <>Cargando datos de dashboard</>;
+  }
+
+  // if (error || !data) {
+  //   return <>Oops, {error}</>;
+  // }
+
+  const { order, customer } = dataDashboard;
 
   function calculateTotalRevenue(orders: any[]) {
     let total = 0;
@@ -38,11 +84,11 @@ export default function Page() {
     return total;
   }
 
-  const orderPaids = order?.filter((order) => order.paid === true);
+  const orderPaids = order?.filter((order) => order.paid === true) || 0;
   const totalRevenue = calculateTotalRevenue(orderPaids);
   const countCustomers = customer?.length;
   const countOrders = order?.length;
-  const countSales = (orderPaids?.length * 100) / order?.length;
+  const countSales = orderPaids?.length > 0 ? (orderPaids?.length * 100) / order?.length : 0;
 
   return (
     <>
@@ -86,10 +132,10 @@ export default function Page() {
           </CardContent>
         </Card>
       </div>
-      <ProductSection />
-      <CustomerSection />
-      <SaleSection />
-      <div className='min-h-[100vh] flex-1 rounded-xl bg-white/50 md:min-h-min' />
+      <ProductSection store_id={store?.id || ''} />
+      <CustomerSection data={customer} />
+      <SaleSection data={order?.filter((order) => order.paid === true)} />
+      {/* <div className='min-h-[100vh] flex-1 rounded-xl bg-white/50 md:min-h-min' /> */}
     </>
   );
 }
