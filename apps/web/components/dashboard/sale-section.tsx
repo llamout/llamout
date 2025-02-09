@@ -3,6 +3,7 @@ import { BadgeDollarSign } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@workspace/ui/components/table';
 import { Card } from '@workspace/ui/components/card';
 import { Satoshi } from '@workspace/ui/components/icons/satoshi';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@workspace/ui/components/tooltip';
 
 import { formatBigNumbers } from '@/lib/number';
 import { formatDate } from '@/lib/date';
@@ -32,7 +33,7 @@ export function SaleSection({ data }: { data: { id: string; amount: number; crea
             <Table>
               <TableHeader className='px-4'>
                 <TableRow className=''>
-                  {/* <TableHead className='w-full'>Customer</TableHead> */}
+                  <TableHead className='w-full'>Identifier</TableHead>
                   <TableHead className='hidden sm:table-cell w-auto whitespace-nowrap'>Date</TableHead>
                   <TableHead className='text-end'>Amount</TableHead>
                 </TableRow>
@@ -41,18 +42,18 @@ export function SaleSection({ data }: { data: { id: string; amount: number; crea
                 {data?.length > 0 &&
                   data?.map((sale: any) => (
                     <TableRow key={sale?.id}>
-                      {/* <TableCell className='overflow-hidden max-w-[120px] text-ellipsis'>
+                      <TableCell className='overflow-hidden max-w-[180px] text-ellipsis'>
                         <TooltipProvider>
                           <Tooltip>
-                            <TooltipTrigger className='overflow-hidden max-w-[120px] text-ellipsis'>
-                              {sale?.pubkey}
+                            <TooltipTrigger className='overflow-hidden max-w-[180px] text-ellipsis'>
+                              {sale?.hash}
                             </TooltipTrigger>
                             <TooltipContent side='top' align='start'>
-                              <p>{sale?.pubkey}</p>
+                              <p>{sale?.hash}</p>
                             </TooltipContent>
                           </Tooltip>
                         </TooltipProvider>
-                      </TableCell> */}
+                      </TableCell>
                       {/* <TableCell>AlignUI・Code Library</TableCell> */}
                       <TableCell className='hidden sm:table-cell w-auto whitespace-nowrap'>
                         {formatDate(sale?.created_at)}
