@@ -83,7 +83,7 @@ export function ProductSection({ store_id }: { store_id: string }) {
 
         {/* Product */}
         {products?.length === 0 ? (
-          <div className='flex flex-col items-center justify-center gap-4 w-full py-8 bg-white border border-dashed rounded-lg'>
+          <div className='flex flex-col items-center justify-center gap-4 w-full p-8 bg-white border border-dashed rounded-lg'>
             <div className='flex flex-col items-center gap-2 text-center'>
               <div className='flex justify-center items-center w-12 h-12 bg-gradient-to-t from-background to-transparent border rounded-lg shadow-sm text-muted-foreground'>
                 <PackageSearch className='size-6' />
@@ -93,7 +93,9 @@ export function ProductSection({ store_id }: { store_id: string }) {
             </div>
             <Dialog>
               <DialogTrigger asChild>
-                <Button>Add Product</Button>
+                <Button className='w-full sm:w-auto' size='lg'>
+                  Add Product
+                </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
@@ -105,12 +107,13 @@ export function ProductSection({ store_id }: { store_id: string }) {
                 </DialogBody>
                 <DialogFooter>
                   <DialogClose asChild>
-                    <Button className='w-full' type='button' variant='secondary'>
+                    <Button className='w-full' size='lg' type='button' variant='secondary'>
                       Cancel
                     </Button>
                   </DialogClose>
                   <Button
                     className='w-full'
+                    size='lg'
                     disabled={loading}
                     onClick={async () => {
                       // Create product
@@ -140,9 +143,11 @@ export function ProductSection({ store_id }: { store_id: string }) {
           products?.map((product) => (
             <div key={product?.id} className='flex justify-between items-center p-4 bg-card rounded-lg border'>
               <div className='flex items-center gap-4'>
-                <div className='hidden overflow-hidden sm:block w-8 h-8 p-0.5 bg-white border rounded-md'>
-                  <img src={product?.image} className='w-full h-full rounded-sm object-cover' />
-                </div>
+                {product?.image && (
+                  <div className='hidden overflow-hidden sm:block w-8 h-8 p-0.5 bg-white border rounded-md'>
+                    <img src={product?.image} className='w-full h-full rounded-sm object-cover' />
+                  </div>
+                )}
                 <h3>{product?.name}</h3>
               </div>
               <div className='flex items-center gap-4'>
