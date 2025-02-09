@@ -34,16 +34,6 @@ export default function Page() {
     return <>Buscando datos...</>;
   }
 
-  if (hasStore?.id) {
-    router.push(`/dashboard/${hasStore?.id}`);
-    return;
-  }
-
-  if (user) {
-    router.push('/onboarding');
-    return;
-  }
-
   if (isLoading) {
     return (
       <div className='flex min-h-svh items-center justify-center bg-background'>
@@ -65,6 +55,16 @@ export default function Page() {
         </div>
       </div>
     );
+  }
+
+  if (hasStore?.id) {
+    router.push(`/dashboard/${hasStore?.id}`);
+    return;
+  }
+
+  if (user) {
+    router.push('/onboarding');
+    return;
   }
 
   return (
