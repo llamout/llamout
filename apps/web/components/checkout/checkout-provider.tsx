@@ -3,15 +3,12 @@
 import { useState } from 'react';
 import Link from 'next/link';
 
-// import { formatBigNumbers } from '@/lib/number';
 import { Satoshi } from '@workspace/ui/components/icons/satoshi';
+import { Skeleton } from '@workspace/ui/components/skeleton';
 
-// import { Footer } from '@/components/footer';
+import { formatBigNumbers } from '@/lib/number';
 
 import { CustomAccordion } from './custom-accordion';
-
-// import { StoreType, ProductType } from '@/types';
-import { Skeleton } from '@workspace/ui/components/skeleton';
 
 export function CheckoutProvider({
   store,
@@ -66,7 +63,7 @@ export function CheckoutProvider({
                   {/* {product?.variants?.length === 0 && ( */}
                   <p className='flex items-center text-lg tracking-tighter text-balance'>
                     <Satoshi className='size-4' />
-                    <span className='font-semibold'>{Number(product?.price) * quantity}</span>
+                    <span className='font-semibold'>{formatBigNumbers(Number(product?.price) * quantity)}</span>
                     <span className='ml-1 text-muted-foreground'>{product?.currency}</span>
                   </p>
                   {/* )} */}
