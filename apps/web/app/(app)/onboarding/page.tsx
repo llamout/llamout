@@ -122,7 +122,7 @@ export default function Page() {
                   lnaddress: store?.lnaddress,
                 });
 
-                alert(idStore);
+                // alert(idStore);
 
                 if (!idStore) {
                   setLoading(false);
