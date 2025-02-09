@@ -6,5 +6,5 @@ export function formatBigNumbers(value: number, decimal?: boolean) {
 
   const format = new Intl.NumberFormat().format(number);
 
-  return format;
+  return String(format);
 }
