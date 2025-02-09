@@ -91,7 +91,7 @@ export function Information({ onComplete, disabled, store }: InformationProps) {
           disabled={(variant === 'email' ? !name || !email : !pubkey) || loading || disabled}
           type='submit'
         >
-          Pay {loading && <LoaderCircle className='size-8 animate-spin' />}
+          {loading ? <LoaderCircle className='size-8 animate-spin' /> : 'Pay'}
         </Button>
       </div>
       {/* </CardContent>
@@ -129,7 +129,7 @@ export function Information({ onComplete, disabled, store }: InformationProps) {
   );
 }
 
-function Copyable({ value, label }: { value: string; label: string }) {
+export function Copyable({ value, label }: { value: string; label: string }) {
   const [disabled, setDisabled] = useState(false);
   const [copyLabel, setCopyLabel] = useState(label);
 
