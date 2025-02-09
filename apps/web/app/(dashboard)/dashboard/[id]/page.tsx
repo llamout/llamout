@@ -1,18 +1,17 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import { init } from '@instantdb/react';
 import { BadgeDollarSign, Contact, ReceiptText } from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@workspace/ui/components/card';
 import { Satoshi } from '@workspace/ui/components/icons/satoshi';
 
 import { formatBigNumbers } from '@/lib/number';
+import { db } from '@/lib/database';
 
 import { ProductSection } from '@/components/dashboard/product-section';
 import { CustomerSection } from '@/components/dashboard/customer-section';
 import { SaleSection } from '@/components/dashboard/sale-section';
-import { db } from '@/lib/database';
 
 export default function Page() {
   const params = useParams<{ id: string }>();
