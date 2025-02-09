@@ -1,9 +1,9 @@
 'use server';
 
 import { id } from '@instantdb/core';
-import { generateSecretKey, getPublicKey } from 'nostr-tools/pure';
 
 import { db } from '@/config/instantdb';
+import { generateHash } from '@/lib/crypto';
 
 export async function addProduct(props: {
   store_id: string;
@@ -15,12 +15,9 @@ export async function addProduct(props: {
 }): Promise<string> {
   const { store_id, image, name, description, price, currency } = props;
 
-  // Generate hash
-  let sk = generateSecretKey();
-  let pk = getPublicKey(sk);
-
   // If not exist, create
   const newId = id();
+  const hash = generateHash();
 
   await db.transact(
     // @ts-ignore
@@ -33,7 +30,7 @@ export async function addProduct(props: {
       description: description ?? null,
       price: price ?? null,
       currency: currency ?? 'SAT',
-      hash: pk,
+      hash,
 
       // Status
       created_at: Date.now(),

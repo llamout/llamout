@@ -3,6 +3,7 @@
 import { id } from '@instantdb/core';
 
 import { db } from '@/config/instantdb';
+import { generateHash } from '@/lib/crypto';
 
 interface AddOrder {
   store_id: any;
@@ -22,6 +23,7 @@ export async function addOrder(props: AddOrder): Promise<string> {
   }
 
   const newId = id();
+  const hash = generateHash();
 
   await db.transact(
     // @ts-ignore
@@ -35,6 +37,7 @@ export async function addOrder(props: AddOrder): Promise<string> {
       quantity: quantity ?? null,
       currency: currency ?? null,
       paid: false,
+      hash,
 
       // Status
       created_at: Date.now(),
