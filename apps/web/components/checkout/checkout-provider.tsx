@@ -61,11 +61,13 @@ export function CheckoutProvider({
                 <div className='flex justify-between items-center'>
                   <h1 className='font-semibold tracking-tighter text-balance'>{product?.name}</h1>
                   {/* {product?.variants?.length === 0 && ( */}
-                  <p className='flex items-center text-lg tracking-tighter text-balance'>
+                  <div className='flex items-center'>
                     <Satoshi className='size-4' />
-                    <span className='font-semibold'>{formatBigNumbers(Number(product?.price) * quantity)}</span>
-                    <span className='ml-1 text-muted-foreground'>{product?.currency}</span>
-                  </p>
+                    <p className='text-lg tracking-tighter text-balance'>
+                      <span className='font-semibold'>{formatBigNumbers(Number(product?.price) * quantity)}</span>
+                      <span className='ml-1 text-muted-foreground'>{product?.currency}</span>
+                    </p>
+                  </div>
                   {/* )} */}
                   {/* {product?.variants?.length === 0 && (
                     <div className='flex items-center gap-4'>

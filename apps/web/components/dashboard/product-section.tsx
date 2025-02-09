@@ -114,8 +114,10 @@ export function ProductSection({ store_id }: { store_id: string }) {
                   <Button
                     className='w-full'
                     size='lg'
-                    disabled={loading}
+                    disabled={loading || !product?.name || !product?.price || product?.price === 0}
                     onClick={async () => {
+                      setLoading(true);
+
                       // Create product
                       const idProduct = await addProduct({
                         store_id,
