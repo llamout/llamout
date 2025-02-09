@@ -54,7 +54,7 @@ export default async function Page({ params }: Props) {
   const { store, product } = data;
 
   return (
-    <div className='w-screen h-screen'>
+    <div className='w-screen h-dvh'>
       <CheckoutProvider store={store} product={product} />
     </div>
   );

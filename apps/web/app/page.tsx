@@ -16,7 +16,7 @@ import { PRODUCT, STORE } from '@/mock';
 export default function Page() {
   return (
     <>
-      <div className='relative z-10 min-w-screen min-h-screen'>
+      <div className='relative z-10 min-w-screen min-h-dvh'>
         <div className='absolute top-0 z-0 flex justify-center gap-16 w-full h-full max-h-96'>
           <div className='w-1 h-full bg-gradient-to-t from-transparent to-white'></div>
           <div className='w-1 h-full bg-gradient-to-t from-transparent to-white'></div>

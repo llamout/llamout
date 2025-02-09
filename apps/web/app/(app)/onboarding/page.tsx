@@ -96,7 +96,7 @@ export default function Page() {
 
   return (
     <>
-      <div className='flex flex-col items-center justify-between gap-12 w-screen h-screen bg-background pt-12'>
+      <div className='flex flex-col items-center justify-between gap-12 w-screen h-dvh bg-background pt-12'>
         <div className='flex flex-col gap-8 w-full max-w-sm px-4'>
           <StoreStep data={store} updateData={setStore} />
           <div className='flex justify-between gap-2 w-full'>
