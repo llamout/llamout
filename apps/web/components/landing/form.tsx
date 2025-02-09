@@ -9,7 +9,7 @@ import { Input } from '@workspace/ui/components/input';
 
 const tabs = [
   { id: 1, name: 'Email', active: true },
-  { id: 1, name: 'Nostr', active: true },
+  { id: 2, name: 'Nostr', active: true },
 ];
 
 export function Form(props: any) {
