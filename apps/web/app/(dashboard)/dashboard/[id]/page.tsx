@@ -1,7 +1,7 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import { BadgeDollarSign, Contact, ReceiptText } from 'lucide-react';
+import { BadgeDollarSign, Contact, LoaderCircle, ReceiptText } from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@workspace/ui/components/card';
 import { Satoshi } from '@workspace/ui/components/icons/satoshi';
@@ -54,15 +54,36 @@ export default function Page() {
   const { data: dataDashboard } = db.useQuery(queryDashboard);
 
   if (!user) {
-    return <>Cargando usuario</>;
+    return (
+      <div className='flex min-h-svh items-center justify-center bg-background'>
+        <div className='flex flex-col items-center gap-4 max-w-sm text-center'>
+          <LoaderCircle className='size-8 animate-spin' />
+          <h2 className='text-lg font-bold'>Loading User</h2>
+        </div>
+      </div>
+    );
   }
 
   if (!store) {
-    return <>Cargando tienda</>;
+    return (
+      <div className='flex min-h-svh items-center justify-center bg-background'>
+        <div className='flex flex-col items-center gap-4 max-w-sm text-center'>
+          <LoaderCircle className='size-8 animate-spin' />
+          <h2 className='text-lg font-bold'>Loading Store</h2>
+        </div>
+      </div>
+    );
   }
 
   if (!dataDashboard) {
-    return <>Cargando datos de dashboard</>;
+    return (
+      <div className='flex min-h-svh items-center justify-center bg-background'>
+        <div className='flex flex-col items-center gap-4 max-w-sm text-center'>
+          <LoaderCircle className='size-8 animate-spin' />
+          <h2 className='text-lg font-bold'>Loading Dashboard</h2>
+        </div>
+      </div>
+    );
   }
 
   // if (error || !data) {
