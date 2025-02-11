@@ -46,6 +46,11 @@ export default function Page() {
     return;
   }
 
+  if (user && !hasStore?.id) {
+    router.push(`/onboarding`);
+    return;
+  }
+
   if (isLoading) {
     return (
       <div className='flex min-h-svh items-center justify-center bg-background'>
