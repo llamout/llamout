@@ -29,7 +29,7 @@ export async function addProduct(props: {
         image: image ?? null,
         name: name ?? null,
         description: description ?? null,
-        price: price ?? null,
+        price: Number(price) ?? null,
         currency: currency ?? 'SAT',
         hash,
 
