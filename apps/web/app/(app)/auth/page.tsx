@@ -31,7 +31,19 @@ export default function Page() {
 
   // TO-DO
   if (isLoadingStore) {
-    return <>Buscando datos...</>;
+    return (
+      <div className='flex min-h-svh items-center justify-center bg-background'>
+        <div className='flex flex-col items-center gap-4 max-w-sm text-center'>
+          <LoaderCircle className='size-8 animate-spin' />
+          <h2 className='text-lg font-bold'>Loading Store</h2>
+        </div>
+      </div>
+    );
+  }
+
+  if (hasStore?.id) {
+    router.push(`/dashboard/${hasStore?.id}`);
+    return;
   }
 
   if (isLoading) {
@@ -55,16 +67,6 @@ export default function Page() {
         </div>
       </div>
     );
-  }
-
-  if (hasStore?.id) {
-    router.push(`/dashboard/${hasStore?.id}`);
-    return;
-  }
-
-  if (user) {
-    router.push('/onboarding');
-    return;
   }
 
   return (
