@@ -102,7 +102,7 @@ export default function Page() {
           <div className='flex justify-between gap-2 w-full'>
             <Button
               className='w-full'
-              disabled={loading}
+              disabled={loading || !store?.name || !store?.lnaddress}
               onClick={async () => {
                 setLoading(true);
 
