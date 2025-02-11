@@ -3,6 +3,7 @@
 import { id } from '@instantdb/core';
 
 import { db } from '@/config/instantdb';
+import { normalizeUrl } from '@/lib/utils';
 
 export async function addStore(props: {
   user_id: string;
@@ -24,7 +25,7 @@ export async function addStore(props: {
       // Data
       image: image ?? null,
       name: name ?? null,
-      website: website ?? null,
+      website: normalizeUrl(website) ?? null,
       lnaddress: lnaddress ?? null,
 
       // Status
