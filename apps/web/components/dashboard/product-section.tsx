@@ -119,7 +119,7 @@ export function ProductSection({ store_id }: { store_id: string }) {
                       setLoading(true);
 
                       // Create product
-                      const idProduct = await addProduct({
+                      const { error, data } = await addProduct({
                         store_id,
                         image: product?.image,
                         name: product?.name,
@@ -127,7 +127,8 @@ export function ProductSection({ store_id }: { store_id: string }) {
                         price: product?.price,
                       });
 
-                      if (!idProduct) {
+                      if (error) {
+                        console.log('error', error);
                         setLoading(false);
                         return;
                       }
