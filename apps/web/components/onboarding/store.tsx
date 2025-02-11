@@ -31,7 +31,7 @@ export function StoreStep({ data, updateData }: any) {
             </Label>
             <Input
               id='name'
-              placeholder='Satoshi'
+              placeholder='Bitcoin Project'
               value={data?.name}
               onChange={(e) => updateData({ ...data, name: e.target.value })}
             />
