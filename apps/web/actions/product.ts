@@ -12,34 +12,38 @@ export async function addProduct(props: {
   description: string;
   price: number;
   currency?: string;
-}): Promise<string> {
+}): Promise<{ error: any; data: any }> {
   const { store_id, image, name, description, price, currency } = props;
 
   // If not exist, create
   const newId = id();
   const hash = generateHash();
 
-  await db.transact(
-    // @ts-ignore
-    db.tx.product[newId].update({
-      store_id,
+  try {
+    await db.transact(
+      // @ts-ignore
+      db.tx.product[newId].update({
+        store_id,
 
-      // Data
-      image: image ?? null,
-      name: name ?? null,
-      description: description ?? null,
-      price: price ?? null,
-      currency: currency ?? 'SAT',
-      hash,
+        // Data
+        image: image ?? null,
+        name: name ?? null,
+        description: description ?? null,
+        price: price ?? null,
+        currency: currency ?? 'SAT',
+        hash,
 
-      // Status
-      created_at: Date.now(),
-      updated_at: Date.now(),
-      status: 'active',
-    }),
-  );
+        // Status
+        created_at: Date.now(),
+        updated_at: Date.now(),
+        status: 'active',
+      }),
+    );
 
-  return newId;
+    return { error: null, data: newId };
+  } catch (error) {
+    return { error, data: null };
+  }
 }
 
 export async function getProduct(hash: string): Promise<{ error: any; data: any }> {
