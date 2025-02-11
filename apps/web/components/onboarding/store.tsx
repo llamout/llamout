@@ -1,11 +1,24 @@
 import Link from 'next/link';
-import { Store } from 'lucide-react';
+import { Check, Store } from 'lucide-react';
+
+import { useToast } from '@workspace/ui/hooks/use-toast';
 
 import { Input } from '@workspace/ui/components/input';
 import { Label } from '@workspace/ui/components/label';
 import { Button } from '@workspace/ui/components/button';
 
-export function StoreStep({ data, updateData }: any) {
+import { getLnurlp } from '@/actions/payment';
+import { useState } from 'react';
+
+export function StoreStep({ data, updateData, onSuccess }: any) {
+  // Hooks
+  const { toast } = useToast();
+
+  // States
+  const [loading, setLoading] = useState(false);
+  const [lnaddress, setLnaddress] = useState('');
+  const [validLn, setValidLn] = useState(false);
+
   return (
     <div className='flex flex-col gap-8'>
       <div className='flex flex-col items-center text-center gap-2'>
@@ -31,7 +44,7 @@ export function StoreStep({ data, updateData }: any) {
             </Label>
             <Input
               id='name'
-              placeholder='Satoshi'
+              placeholder='Bitcoin Project'
               value={data?.name}
               onChange={(e) => updateData({ ...data, name: e.target.value })}
             />
@@ -51,12 +64,56 @@ export function StoreStep({ data, updateData }: any) {
           <Label htmlFor='lnaddress'>
             Lightning Address <span className='text-destructive'>*</span>
           </Label>
-          <Input
-            id='lnaddress'
-            placeholder='your@lightning.address'
-            value={data?.lnaddress}
-            onChange={(e) => updateData({ ...data, lnaddress: e.target.value })}
-          />
+          <div className='relative'>
+            <Input
+              id='lnaddress'
+              placeholder='your@lightning.address'
+              value={lnaddress}
+              disabled={loading}
+              onChange={(e) => {
+                setValidLn(false);
+                setLnaddress(e.target.value);
+                updateData({ ...data, lnaddress: '' });
+              }}
+            />
+            <div className='absolute right-2 top-0 flex items-center h-full'>
+              <Button
+                size='sm'
+                variant='secondary'
+                disabled={!lnaddress || loading || validLn}
+                onClick={async () => {
+                  setLoading(true);
+                  try {
+                    const res = await getLnurlp(lnaddress);
+
+                    if (res?.status !== 'OK') {
+                      setLoading(false);
+                      toast({
+                        variant: 'destructive',
+                        title: 'Oops!',
+                        description: String(res?.data),
+                      });
+
+                      return;
+                    }
+
+                    updateData({ ...data, lnaddress: lnaddress });
+                    setValidLn(true);
+                    setLoading(false);
+                  } catch (error) {
+                    setLoading(false);
+                    toast({
+                      variant: 'destructive',
+                      title: 'Oops!',
+                      description: String(error),
+                    });
+                  }
+                }}
+              >
+                {validLn ? <Check className='text-green-500' /> : 'Validate'}
+              </Button>
+            </div>
+          </div>
           <Button variant='link' asChild>
             <Link href='https://lightningaddress.com/' target='_blank'>
               Get a Lightning Address
