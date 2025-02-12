@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { init } from '@instantdb/react';
 import { LoaderCircle, ScanFace, ShieldAlert } from 'lucide-react';
@@ -42,6 +43,25 @@ export default function Page() {
   const { data: dataStore, isLoading: isLoadingStore } = db.useQuery(queryStore);
   const hasStore = dataStore?.store[0];
 
+  // TO-DO
+  if (isLoadingStore) {
+    return <>Buscando datos...</>;
+  }
+
+  if (hasStore?.id) {
+    return (
+      <div className='flex min-h-svh items-center justify-center bg-background'>
+        <div className='flex flex-col items-center gap-4 max-w-sm text-center'>
+          {/* <LoaderCircle className='size-8 animate-spin' /> */}
+          {/* <h2 className='text-lg font-bold'>Loading</h2> */}
+          <Button variant='link' asChild>
+            <Link href={`/dashboard/${hasStore?.id}`}>Go to Dashboard</Link>
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   if (isLoading) {
     return (
       <div className='flex min-h-svh items-center justify-center bg-background'>
@@ -82,16 +102,6 @@ export default function Page() {
         </div>
       </>
     );
-  }
-
-  // TO-DO
-  if (isLoadingStore) {
-    return <>Buscando datos...</>;
-  }
-
-  if (hasStore?.id) {
-    router.push(`/dashboard/${hasStore?.id}`);
-    return;
   }
 
   return (
