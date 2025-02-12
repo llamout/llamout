@@ -109,35 +109,39 @@ export function Information({ onComplete, disabled, store }: InformationProps) {
       </div>
       {/* </CardContent>
       </Card> */}
-      <div className='flex items-center gap-2 px-4'>
-        <div className='w-full h-[1px] bg-gray-300'></div>
-        <span className='text-sm text-muted-foreground'>or</span>
-        <div className='w-full h-[1px] bg-gray-300'></div>
-      </div>
-      {variant === 'email' ? (
-        <Button
-          className='w-full'
-          variant='outline'
-          disabled={!!emailParams}
-          onClick={() => {
-            setName('');
-            setEmail('');
-            setVariant('pubkey');
-          }}
-        >
-          Continue with Nostr
-        </Button>
-      ) : (
-        <Button
-          className='w-full'
-          variant='outline'
-          onClick={() => {
-            setPubkey('');
-            setVariant('email');
-          }}
-        >
-          Continue with Email
-        </Button>
+      {!emailParams && (
+        <>
+          <div className='flex items-center gap-2 px-4'>
+            <div className='w-full h-[1px] bg-gray-300'></div>
+            <span className='text-sm text-muted-foreground'>or</span>
+            <div className='w-full h-[1px] bg-gray-300'></div>
+          </div>
+          {variant === 'email' ? (
+            <Button
+              className='w-full'
+              variant='outline'
+              disabled={!!emailParams}
+              onClick={() => {
+                setName('');
+                setEmail('');
+                setVariant('pubkey');
+              }}
+            >
+              Continue with Nostr
+            </Button>
+          ) : (
+            <Button
+              className='w-full'
+              variant='outline'
+              onClick={() => {
+                setPubkey('');
+                setVariant('email');
+              }}
+            >
+              Continue with Email
+            </Button>
+          )}
+        </>
       )}
     </form>
   );
@@ -248,7 +252,7 @@ export function CustomAccordion(props: CustomAccordion) {
   const [invoice, setInvoice] = useState<string>('');
   const [verify, setVerify] = useState<string>('');
 
-  const price = product?.price * quantity;
+  const price = product?.price[0]?.price * quantity;
 
   useEffect(() => {
     if (orderId && verify) {
@@ -319,10 +323,10 @@ export function CustomAccordion(props: CustomAccordion) {
                   // Relations
                   store_id: String(store?.id),
                   product_id: String(product?.id),
+                  price_id: String(product?.price[0]?.id),
                   customer_id: id,
                   // Data
-                  amount: price,
-                  currency: product?.currency,
+                  amount: Number(product?.price[0]?.price),
                   quantity,
                 });
 
