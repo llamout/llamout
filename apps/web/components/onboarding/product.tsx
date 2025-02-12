@@ -71,13 +71,15 @@ export function ProductStep({ data, updateData }: { data: any; updateData: (valu
                   id='price'
                   type='number'
                   placeholder='0'
-                  value={data?.price ?? null}
-                  onChange={(e) =>
-                    updateData({
-                      ...data,
-                      prices: [{ price: Number(e.target.value), type: 'one_time', interval: null }],
-                    })
-                  }
+                  value={data?.prices[0]?.price ?? null}
+                  onChange={(e) => {
+                    if (Number(e.target.value) > 0) {
+                      updateData({
+                        ...data,
+                        prices: [{ price: Number(e.target.value), type: 'one_time', interval: null }],
+                      });
+                    }
+                  }}
                 />
               </div>
               <div className='flex flex-col gap-2'>
