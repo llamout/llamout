@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Check, Heart, LoaderCircle } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { useSearchParams } from 'next/navigation';
 
 import { Button } from '@workspace/ui/components/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@workspace/ui/components/accordion';
@@ -23,10 +24,15 @@ type InformationProps = {
 };
 
 export function Information({ onComplete, disabled, store }: InformationProps) {
+  // Libs and hooks
+  const searchParams = useSearchParams();
+  const emailParams = searchParams.get('email');
+
+  // Component
   const [loading, setLoading] = useState(false);
 
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(emailParams ?? '');
 
   const [variant, setVariant] = useState<'email' | 'pubkey'>('email');
   const [pubkey, setPubkey] = useState('');
@@ -51,7 +57,9 @@ export function Information({ onComplete, disabled, store }: InformationProps) {
         {variant === 'email' ? (
           <>
             <div className='grid gap-2'>
-              <Label htmlFor='name'>Name *</Label>
+              <Label htmlFor='name'>
+                Name <span className='text-destructive'>*</span>
+              </Label>
               <Input
                 id='name'
                 type='text'
@@ -62,20 +70,25 @@ export function Information({ onComplete, disabled, store }: InformationProps) {
               />
             </div>
             <div className='grid gap-2'>
-              <Label htmlFor='email'>Email *</Label>
+              <Label htmlFor='email'>
+                Email <span className='text-destructive'>*</span>
+              </Label>
               <Input
                 id='email'
                 type='email'
                 placeholder='satoshi@bitcoin.org'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                disabled={!!emailParams}
                 required
               />
             </div>
           </>
         ) : (
           <div className='grid gap-2'>
-            <Label htmlFor='pubkey'>Pubkey *</Label>
+            <Label htmlFor='pubkey'>
+              Pubkey <span className='text-destructive'>*</span>
+            </Label>
             <Input
               id='pubkey'
               type='text'
@@ -105,6 +118,7 @@ export function Information({ onComplete, disabled, store }: InformationProps) {
         <Button
           className='w-full'
           variant='outline'
+          disabled={!!emailParams}
           onClick={() => {
             setName('');
             setEmail('');
