@@ -63,43 +63,16 @@ export function CheckoutProvider({
               <div className='flex flex-col gap-4'>
                 <div className='flex justify-between items-center'>
                   <h1 className='font-semibold tracking-tighter text-balance'>{product?.name}</h1>
-                  {/* {product?.variants?.length === 0 && ( */}
-                  <div className='flex items-center'>
-                    <Satoshi className='size-4' />
-                    <p className='text-lg tracking-tighter text-balance'>
-                      <span className='font-semibold'>{formatBigNumbers(Number(product?.price) * quantity)}</span>
-                      <span className='ml-1 text-muted-foreground'>{product?.currency}</span>
-                    </p>
-                  </div>
-                  {/* )} */}
-                  {/* {product?.variants?.length === 0 && (
-                    <div className='flex items-center gap-4'>
-                      <Button
-                        size='icon'
-                        variant={quantity <= 1 || disabled ? 'ghost' : 'default'}
-                        disabled={quantity <= 1 || disabled}
-                        onClick={() => {
-                          if (!disabled) setQuantity(quantity - 1);
-                        }}
-                      >
-                        <Minus />
-                      </Button>
-                      <p className='min-w-10 text-center text-md font-semibold'>
-                        <span className='text-xs text-muted-foreground mr-1'>x</span>
-                        {quantity}
-                      </p>
-                      <Button
-                        size='icon'
-                        variant={disabled ? 'ghost' : 'default'}
-                        disabled={disabled}
-                        onClick={() => {
-                          if (!disabled) setQuantity(quantity + 1);
-                        }}
-                      >
-                        <Plus />
-                      </Button>
-                    </div>
-                  )} */}
+                  {product?.price.length > 0 &&
+                    product?.price?.map((variant: any, index: any) => (
+                      <div className='flex items-center' key={index}>
+                        <Satoshi className='size-4' />
+                        <p className='text-lg tracking-tighter text-balance'>
+                          <span className='font-semibold'>{formatBigNumbers(Number(variant?.price) * quantity)}</span>
+                          <span className='ml-1 text-muted-foreground'>{variant?.currency}</span>
+                        </p>
+                      </div>
+                    ))}
                 </div>
                 {readOnly && !product?.image && <Skeleton className='w-full h-[280px] bg-gray-200 rounded-xl' />}
                 {product?.image && (
