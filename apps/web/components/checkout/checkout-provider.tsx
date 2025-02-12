@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { BadgeAlert } from 'lucide-react';
 
 import { Satoshi } from '@workspace/ui/components/icons/satoshi';
 import { Skeleton } from '@workspace/ui/components/skeleton';
@@ -14,10 +15,12 @@ export function CheckoutProvider({
   store,
   product,
   readOnly = false,
+  isSoldOut = false,
 }: {
   store: any;
   product: any;
   readOnly?: boolean;
+  isSoldOut?: boolean;
 }) {
   const [quantity, setQuantity] = useState(1);
 
@@ -60,43 +63,16 @@ export function CheckoutProvider({
               <div className='flex flex-col gap-4'>
                 <div className='flex justify-between items-center'>
                   <h1 className='font-semibold tracking-tighter text-balance'>{product?.name}</h1>
-                  {/* {product?.variants?.length === 0 && ( */}
-                  <div className='flex items-center'>
-                    <Satoshi className='size-4' />
-                    <p className='text-lg tracking-tighter text-balance'>
-                      <span className='font-semibold'>{formatBigNumbers(Number(product?.price) * quantity)}</span>
-                      <span className='ml-1 text-muted-foreground'>{product?.currency}</span>
-                    </p>
-                  </div>
-                  {/* )} */}
-                  {/* {product?.variants?.length === 0 && (
-                    <div className='flex items-center gap-4'>
-                      <Button
-                        size='icon'
-                        variant={quantity <= 1 || disabled ? 'ghost' : 'default'}
-                        disabled={quantity <= 1 || disabled}
-                        onClick={() => {
-                          if (!disabled) setQuantity(quantity - 1);
-                        }}
-                      >
-                        <Minus />
-                      </Button>
-                      <p className='min-w-10 text-center text-md font-semibold'>
-                        <span className='text-xs text-muted-foreground mr-1'>x</span>
-                        {quantity}
-                      </p>
-                      <Button
-                        size='icon'
-                        variant={disabled ? 'ghost' : 'default'}
-                        disabled={disabled}
-                        onClick={() => {
-                          if (!disabled) setQuantity(quantity + 1);
-                        }}
-                      >
-                        <Plus />
-                      </Button>
-                    </div>
-                  )} */}
+                  {product?.price.length > 0 &&
+                    product?.price?.map((variant: any, index: any) => (
+                      <div className='flex items-center' key={index}>
+                        <Satoshi className='size-4' />
+                        <p className='text-lg tracking-tighter text-balance'>
+                          <span className='font-semibold'>{formatBigNumbers(Number(variant?.price) * quantity)}</span>
+                          <span className='ml-1 text-muted-foreground'>{variant?.currency}</span>
+                        </p>
+                      </div>
+                    ))}
                 </div>
                 {readOnly && !product?.image && <Skeleton className='w-full h-[280px] bg-gray-200 rounded-xl' />}
                 {product?.image && (
@@ -131,12 +107,27 @@ export function CheckoutProvider({
         </div>
 
         {/* Content */}
-        <div className='flex flex-col justify-center items-center w-full'>
-          <div className='flex-1 flex w-full max-w-md h-full px-4 py-8 md:py-24'>
-            <CustomAccordion readOnly={readOnly} quantity={quantity} store={store} product={product} />
+        {isSoldOut ? (
+          <div className='flex-1 md:flex-initial flex flex-col justify-center items-center gap-4 w-full py-12 text-center'>
+            <div className='flex justify-center items-center w-12 h-12 bg-gradient-to-t from-background to-white border rounded-lg shadow-sm text-muted-foreground'>
+              <BadgeAlert className='size-6' />
+            </div>
+            <div className='flex flex-col gap-2'>
+              <h3 className='text-lg font-semibold'>Sold out</h3>
+              <p className='text-sm text-muted-foreground'>
+                The product has reached its limit. <br />
+                Please contact the store for further support.
+              </p>
+            </div>
           </div>
-          {/* <Footer /> */}
-        </div>
+        ) : (
+          <div className='flex flex-col justify-center items-center w-full'>
+            <div className='flex-1 flex w-full max-w-md h-full px-4 py-8 md:py-24'>
+              <CustomAccordion readOnly={readOnly} quantity={quantity} store={store} product={product} />
+            </div>
+          </div>
+        )}
+        {/* <Footer /> */}
       </div>
     </div>
   );

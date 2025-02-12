@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { Check, Heart, LoaderCircle } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { useSearchParams } from 'next/navigation';
 
 import { Button } from '@workspace/ui/components/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@workspace/ui/components/accordion';
@@ -23,10 +24,15 @@ type InformationProps = {
 };
 
 export function Information({ onComplete, disabled, store }: InformationProps) {
+  // Libs and hooks
+  const searchParams = useSearchParams();
+  const emailParams = searchParams.get('email');
+
+  // Component
   const [loading, setLoading] = useState(false);
 
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(emailParams ?? '');
 
   const [variant, setVariant] = useState<'email' | 'pubkey'>('email');
   const [pubkey, setPubkey] = useState('');
@@ -51,7 +57,9 @@ export function Information({ onComplete, disabled, store }: InformationProps) {
         {variant === 'email' ? (
           <>
             <div className='grid gap-2'>
-              <Label htmlFor='name'>Name *</Label>
+              <Label htmlFor='name'>
+                Name <span className='text-destructive'>*</span>
+              </Label>
               <Input
                 id='name'
                 type='text'
@@ -62,20 +70,25 @@ export function Information({ onComplete, disabled, store }: InformationProps) {
               />
             </div>
             <div className='grid gap-2'>
-              <Label htmlFor='email'>Email *</Label>
+              <Label htmlFor='email'>
+                Email <span className='text-destructive'>*</span>
+              </Label>
               <Input
                 id='email'
                 type='email'
                 placeholder='satoshi@bitcoin.org'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                disabled={!!emailParams}
                 required
               />
             </div>
           </>
         ) : (
           <div className='grid gap-2'>
-            <Label htmlFor='pubkey'>Pubkey *</Label>
+            <Label htmlFor='pubkey'>
+              Pubkey <span className='text-destructive'>*</span>
+            </Label>
             <Input
               id='pubkey'
               type='text'
@@ -96,34 +109,39 @@ export function Information({ onComplete, disabled, store }: InformationProps) {
       </div>
       {/* </CardContent>
       </Card> */}
-      <div className='flex items-center gap-2 px-4'>
-        <div className='w-full h-[1px] bg-gray-300'></div>
-        <span className='text-sm text-muted-foreground'>or</span>
-        <div className='w-full h-[1px] bg-gray-300'></div>
-      </div>
-      {variant === 'email' ? (
-        <Button
-          className='w-full'
-          variant='outline'
-          onClick={() => {
-            setName('');
-            setEmail('');
-            setVariant('pubkey');
-          }}
-        >
-          Continue with Nostr
-        </Button>
-      ) : (
-        <Button
-          className='w-full'
-          variant='outline'
-          onClick={() => {
-            setPubkey('');
-            setVariant('email');
-          }}
-        >
-          Continue with Email
-        </Button>
+      {!emailParams && (
+        <>
+          <div className='flex items-center gap-2 px-4'>
+            <div className='w-full h-[1px] bg-gray-300'></div>
+            <span className='text-sm text-muted-foreground'>or</span>
+            <div className='w-full h-[1px] bg-gray-300'></div>
+          </div>
+          {variant === 'email' ? (
+            <Button
+              className='w-full'
+              variant='outline'
+              disabled={!!emailParams}
+              onClick={() => {
+                setName('');
+                setEmail('');
+                setVariant('pubkey');
+              }}
+            >
+              Continue with Nostr
+            </Button>
+          ) : (
+            <Button
+              className='w-full'
+              variant='outline'
+              onClick={() => {
+                setPubkey('');
+                setVariant('email');
+              }}
+            >
+              Continue with Email
+            </Button>
+          )}
+        </>
       )}
     </form>
   );
@@ -234,7 +252,7 @@ export function CustomAccordion(props: CustomAccordion) {
   const [invoice, setInvoice] = useState<string>('');
   const [verify, setVerify] = useState<string>('');
 
-  const price = product?.price * quantity;
+  const price = product?.price[0]?.price * quantity;
 
   useEffect(() => {
     if (orderId && verify) {
@@ -296,35 +314,37 @@ export function CustomAccordion(props: CustomAccordion) {
           {/* {isCompleted('information') && <span className='text-sm text-green-500'>Completed</span>} */}
         </AccordionTrigger>
         <AccordionContent>
-          <Information
-            store={store}
-            disabled={readOnly}
-            onComplete={async (id) => {
-              const _id = await addOrder({
-                // Relations
-                store_id: String(store?.id),
-                product_id: String(product?.id),
-                customer_id: id,
-                // Data
-                amount: price,
-                currency: product?.currency,
-                quantity,
-              });
+          <Suspense>
+            <Information
+              store={store}
+              disabled={readOnly}
+              onComplete={async (id) => {
+                const _id = await addOrder({
+                  // Relations
+                  store_id: String(store?.id),
+                  product_id: String(product?.id),
+                  price_id: String(product?.price[0]?.id),
+                  customer_id: id,
+                  // Data
+                  amount: Number(product?.price[0]?.price),
+                  quantity,
+                });
 
-              setOrderId(_id);
-              handleComplete('information');
+                setOrderId(_id);
+                handleComplete('information');
 
-              // General Payment
-              // TO-DO: Validate LUD16
-              const data = await generatePayment({
-                lightningAddress: store?.lnaddress,
-                amount: price,
-              });
+                // General Payment
+                // TO-DO: Validate LUD16
+                const data = await generatePayment({
+                  lightningAddress: store?.lnaddress,
+                  amount: price,
+                });
 
-              setInvoice(data?.invoice?.pr);
-              setVerify(data?.invoice?.verify);
-            }}
-          />
+                setInvoice(data?.invoice?.pr);
+                setVerify(data?.invoice?.verify);
+              }}
+            />
+          </Suspense>
         </AccordionContent>
       </AccordionItem>
 

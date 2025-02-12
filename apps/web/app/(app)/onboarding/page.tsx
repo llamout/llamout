@@ -42,16 +42,6 @@ export default function Page() {
   const { data: dataStore, isLoading: isLoadingStore } = db.useQuery(queryStore);
   const hasStore = dataStore?.store[0];
 
-  // TO-DO
-  if (isLoadingStore) {
-    return <>Buscando datos...</>;
-  }
-
-  if (hasStore?.id) {
-    router.push(`/dashboard/${hasStore?.id}`);
-    return;
-  }
-
   if (isLoading) {
     return (
       <div className='flex min-h-svh items-center justify-center bg-background'>
@@ -92,6 +82,16 @@ export default function Page() {
         </div>
       </>
     );
+  }
+
+  // TO-DO
+  if (isLoadingStore) {
+    return <>Buscando datos...</>;
+  }
+
+  if (hasStore?.id) {
+    router.push(`/dashboard/${hasStore?.id}`);
+    return;
   }
 
   return (

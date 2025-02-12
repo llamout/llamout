@@ -9,16 +9,17 @@ interface AddOrder {
   store_id: any;
   customer_id: any;
   product_id: string;
+  price_id: string;
   amount: number;
-  currency: string;
+  currency?: string;
   quantity: number;
 }
 
 export async function addOrder(props: AddOrder): Promise<string> {
-  const { store_id, customer_id, product_id, amount, currency, quantity } = props;
+  const { store_id, customer_id, product_id, price_id, amount, currency = 'SAT', quantity } = props;
 
   // TO-DO
-  if (!product_id || !store_id) {
+  if (!product_id || !store_id || !price_id) {
     // return {}
   }
 
@@ -30,12 +31,13 @@ export async function addOrder(props: AddOrder): Promise<string> {
     db.tx.order[newId].update({
       store_id,
       product_id,
+      price_id,
       customer_id,
 
       // Data
       amount: amount ?? null,
       quantity: quantity ?? null,
-      currency: currency ?? null,
+      currency,
       paid: false,
       hash,
 
@@ -63,4 +65,27 @@ export async function modifyOrder(id: any): Promise<{ error: string | null }> {
   );
 
   return { error: null };
+}
+
+export async function getPaidOrders(store_id: string) {
+  if (!store_id) return { error: 'Store required' };
+
+  const query = {
+    order: {
+      $: {
+        where: {
+          store_id,
+          paid: true,
+        },
+      },
+    },
+  };
+
+  try {
+    const { order } = await db.query(query);
+
+    return { error: null, data: order };
+  } catch (error) {
+    return { error, data: null };
+  }
 }

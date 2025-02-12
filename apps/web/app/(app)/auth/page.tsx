@@ -46,7 +46,7 @@ export default function Page() {
     return;
   }
 
-  if (user && !hasStore?.id) {
+  if (!!user && !hasStore?.id) {
     router.push(`/onboarding`);
     return;
   }
