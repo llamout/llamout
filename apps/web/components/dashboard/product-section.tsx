@@ -32,6 +32,7 @@ import { addProduct } from '@/actions/product';
 
 import { ProductStep } from '../onboarding/product';
 import { db } from '@/lib/database';
+import { IntervalTypes, TypeTypes } from '@/types';
 
 export function ProductSection({ store_id }: { store_id: string }) {
   const [loading, setLoading] = useState(false);
@@ -39,16 +40,30 @@ export function ProductSection({ store_id }: { store_id: string }) {
     image: string;
     name: string;
     description: string;
-    price: number;
-    currency: string;
-    variants: [];
-  }>({ image: '', name: '', description: '', price: 0, currency: 'SAT', variants: [] });
+    prices: { price: number; currency: string; type: TypeTypes; interval: IntervalTypes | null }[];
+  }>({ image: '', name: '', description: '', prices: [] });
 
-  const query = { product: { $: { where: { store_id } } } };
+  const query = {
+    product: {
+      $: {
+        where: {
+          store_id,
+        },
+      },
+    },
+    price: {
+      $: {
+        where: {
+          store_id,
+        },
+      },
+    },
+  };
 
   const { isLoading, data } = db.useQuery(query);
 
   const products = data?.product;
+  const price = data?.price[0];
 
   return (
     <div className='flex flex-col gap-4'>
@@ -114,7 +129,7 @@ export function ProductSection({ store_id }: { store_id: string }) {
                   <Button
                     className='w-full'
                     size='lg'
-                    disabled={loading || !product?.name || !product?.price || product?.price === 0}
+                    disabled={loading || !product?.name || product?.prices.length === 0}
                     onClick={async () => {
                       setLoading(true);
 
@@ -124,7 +139,7 @@ export function ProductSection({ store_id }: { store_id: string }) {
                         image: product?.image,
                         name: product?.name,
                         description: product?.description,
-                        price: product?.price,
+                        prices: product?.prices,
                       });
 
                       if (error) {
@@ -156,7 +171,7 @@ export function ProductSection({ store_id }: { store_id: string }) {
               <div className='flex items-center gap-4'>
                 <div className='flex items-center gap-1'>
                   <Satoshi className='size-4' />
-                  <div className='text-md font-semibold'>{formatBigNumbers(product?.price)}</div>
+                  <div className='text-md font-semibold'>{formatBigNumbers(price?.price)}</div>
                 </div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
