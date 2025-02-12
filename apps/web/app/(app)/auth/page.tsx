@@ -41,15 +41,15 @@ export default function Page() {
     );
   }
 
-  if (hasStore?.id) {
-    router.push(`/dashboard/${hasStore?.id}`);
-    return;
-  }
+  // useEffect(() => {
+  //   if (hasStore?.id) {
+  //     router.push(`/dashboard/${hasStore?.id}`);
+  //   }
 
-  if (!!user && !hasStore?.id) {
-    router.push(`/onboarding`);
-    return;
-  }
+  //   if (!!user && !hasStore?.id) {
+  //     router.push(`/onboarding`);
+  //   }
+  // }, [hasStore, user]);
 
   if (isLoading) {
     return (
