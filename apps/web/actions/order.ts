@@ -64,3 +64,26 @@ export async function modifyOrder(id: any): Promise<{ error: string | null }> {
 
   return { error: null };
 }
+
+export async function getPaidOrders(store_id: string) {
+  if (!store_id) return { error: 'Store required' };
+
+  const query = {
+    order: {
+      $: {
+        where: {
+          store_id,
+          paid: true,
+        },
+      },
+    },
+  };
+
+  try {
+    const { order } = await db.query(query);
+
+    return { error: null, data: order };
+  } catch (error) {
+    return { error, data: null };
+  }
+}
