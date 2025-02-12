@@ -5,15 +5,17 @@ import { id } from '@instantdb/core';
 import { db } from '@/config/instantdb';
 import { generateHash } from '@/lib/crypto';
 
+import { addPrice } from './price';
+import { IntervalTypes, TypeTypes } from '@/types';
+
 export async function addProduct(props: {
   store_id: string;
   image: string;
   name: string;
   description: string;
-  price: number;
-  currency?: string;
+  prices: { price: number; currency: string; interval: IntervalTypes | null; type: TypeTypes }[];
 }): Promise<{ error: any; data: any }> {
-  const { store_id, image, name, description, price, currency } = props;
+  const { store_id, image, name, description, prices } = props;
 
   // If not exist, create
   const newId = id();
@@ -29,8 +31,6 @@ export async function addProduct(props: {
         image: image ?? null,
         name: name ?? null,
         description: description ?? null,
-        price: Number(price) ?? null,
-        currency: currency ?? 'SAT',
         hash,
         is_subscription: false,
 
@@ -40,6 +40,16 @@ export async function addProduct(props: {
         status: 'active',
       }),
     );
+
+    for (let index = 0; index < prices.length; index++) {
+      await addPrice({
+        store_id,
+        product_id: newId,
+        price: Number(prices[index]?.price),
+        interval: prices[index]?.interval ?? null,
+        type: prices[index]?.type,
+      });
+    }
 
     return { error: null, data: newId };
   } catch (error) {
@@ -62,24 +72,39 @@ export async function getProduct(hash: string): Promise<{ error: any; data: any 
   try {
     const { product } = await db.query(queryProduct);
 
-    if (product?.length === 0) {
+    if (!!product && product?.length === 0) {
       return { error: 'There is no product', data: null };
     }
 
-    const queryStore = {
+    const _product = product[0];
+
+    // TO-DO
+    if (!_product?.id) {
+      return { error: 'Product ID is undefined', data: null };
+    }
+
+    const query = {
+      price: {
+        $: {
+          where: {
+            product_id: _product?.id,
+          },
+        },
+      },
       store: {
         $: {
           limit: 1,
           where: {
-            id: product[0]?.store_id,
+            id: _product?.store_id,
           },
         },
       },
     };
 
-    const { store } = await db.query(queryStore);
+    const { store, price } = await db.query(query);
+    const _store = store[0];
 
-    return { error: null, data: { product: product[0], store: store[0] } };
+    return { error: null, data: { product: { ..._product, price }, store: _store } };
   } catch (error) {
     return { error, data: null };
   }
