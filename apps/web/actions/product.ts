@@ -32,6 +32,7 @@ export async function addProduct(props: {
         price: Number(price) ?? null,
         currency: currency ?? 'SAT',
         hash,
+        is_subscription: false,
 
         // Status
         created_at: Date.now(),
