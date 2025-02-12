@@ -5,6 +5,8 @@ import { FileSearch } from 'lucide-react';
 import { Button } from '@workspace/ui/components/button';
 
 import { getProduct } from '@/actions/product';
+import { getPaidOrders } from '@/actions/order';
+import { LIMIT_SALES_FREE } from '@/config/system';
 
 import { CheckoutProvider } from '@/components/checkout/checkout-provider';
 
@@ -52,10 +54,11 @@ export default async function Page({ params }: Props) {
   }
 
   const { store, product } = data;
+  const { data: dataOrders } = await getPaidOrders(store?.id);
 
   return (
     <div className='w-screen h-dvh'>
-      <CheckoutProvider store={store} product={product} />
+      <CheckoutProvider store={store} product={product} isSoldOut={dataOrders?.length === LIMIT_SALES_FREE} />
     </div>
   );
 }
