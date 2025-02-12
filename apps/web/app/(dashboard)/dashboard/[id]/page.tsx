@@ -135,8 +135,8 @@ export default function Page() {
         <div className='relative w-full h-full'>
           {orderPaids?.length === LIMIT_SALES_FREE && (
             <div className='absolute z-10 top-0 left-0 flex justify-center items-center w-full h-full'>
-              <Button className='w-full' variant='secondary' size='lg' disabled={true}>
-                Upgrade <Badge>Soon</Badge>
+              <Button className='w-full' variant='ghost' size='lg' disabled={true}>
+                Upgrade <Badge variant='secondary'>Soon</Badge>
               </Button>
             </div>
           )}
