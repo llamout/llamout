@@ -119,7 +119,7 @@ export default function Page() {
           <div className='relative z-10 flex flex-col gap-2'>
             <h2 className='text-lg font-semibold'>Total Sales</h2>
             <p className='text-sm text-muted-foreground'>
-              You are using the free plan, which allows you to make up to 50 sales.
+              You are using the free plan, which allows you to make up to {LIMIT_SALES_FREE} sales.
             </p>
           </div>
           {/* {orderPaids?.length < LIMIT_SALES_FREE && (

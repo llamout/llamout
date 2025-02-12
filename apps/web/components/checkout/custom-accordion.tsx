@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { Check, Heart, LoaderCircle } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -310,35 +310,37 @@ export function CustomAccordion(props: CustomAccordion) {
           {/* {isCompleted('information') && <span className='text-sm text-green-500'>Completed</span>} */}
         </AccordionTrigger>
         <AccordionContent>
-          <Information
-            store={store}
-            disabled={readOnly}
-            onComplete={async (id) => {
-              const _id = await addOrder({
-                // Relations
-                store_id: String(store?.id),
-                product_id: String(product?.id),
-                customer_id: id,
-                // Data
-                amount: price,
-                currency: product?.currency,
-                quantity,
-              });
+          <Suspense>
+            <Information
+              store={store}
+              disabled={readOnly}
+              onComplete={async (id) => {
+                const _id = await addOrder({
+                  // Relations
+                  store_id: String(store?.id),
+                  product_id: String(product?.id),
+                  customer_id: id,
+                  // Data
+                  amount: price,
+                  currency: product?.currency,
+                  quantity,
+                });
 
-              setOrderId(_id);
-              handleComplete('information');
+                setOrderId(_id);
+                handleComplete('information');
 
-              // General Payment
-              // TO-DO: Validate LUD16
-              const data = await generatePayment({
-                lightningAddress: store?.lnaddress,
-                amount: price,
-              });
+                // General Payment
+                // TO-DO: Validate LUD16
+                const data = await generatePayment({
+                  lightningAddress: store?.lnaddress,
+                  amount: price,
+                });
 
-              setInvoice(data?.invoice?.pr);
-              setVerify(data?.invoice?.verify);
-            }}
-          />
+                setInvoice(data?.invoice?.pr);
+                setVerify(data?.invoice?.verify);
+              }}
+            />
+          </Suspense>
         </AccordionContent>
       </AccordionItem>
 
