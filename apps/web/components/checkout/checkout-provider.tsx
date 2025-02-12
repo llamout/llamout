@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { BadgeAlert } from 'lucide-react';
 
 import { Satoshi } from '@workspace/ui/components/icons/satoshi';
 import { Skeleton } from '@workspace/ui/components/skeleton';
@@ -14,10 +15,12 @@ export function CheckoutProvider({
   store,
   product,
   readOnly = false,
+  isSoldOut = false,
 }: {
   store: any;
   product: any;
   readOnly?: boolean;
+  isSoldOut?: boolean;
 }) {
   const [quantity, setQuantity] = useState(1);
 
@@ -131,12 +134,27 @@ export function CheckoutProvider({
         </div>
 
         {/* Content */}
-        <div className='flex flex-col justify-center items-center w-full'>
-          <div className='flex-1 flex w-full max-w-md h-full px-4 py-8 md:py-24'>
-            <CustomAccordion readOnly={readOnly} quantity={quantity} store={store} product={product} />
+        {isSoldOut ? (
+          <div className='flex-1 md:flex-initial flex flex-col justify-center items-center gap-4 w-full py-12 text-center'>
+            <div className='flex justify-center items-center w-12 h-12 bg-gradient-to-t from-background to-white border rounded-lg shadow-sm text-muted-foreground'>
+              <BadgeAlert className='size-6' />
+            </div>
+            <div className='flex flex-col gap-2'>
+              <h3 className='text-lg font-semibold'>Sold out</h3>
+              <p className='text-sm text-muted-foreground'>
+                The product has reached its limit. <br />
+                Please contact the store for further support.
+              </p>
+            </div>
           </div>
-          {/* <Footer /> */}
-        </div>
+        ) : (
+          <div className='flex flex-col justify-center items-center w-full'>
+            <div className='flex-1 flex w-full max-w-md h-full px-4 py-8 md:py-24'>
+              <CustomAccordion readOnly={readOnly} quantity={quantity} store={store} product={product} />
+            </div>
+          </div>
+        )}
+        {/* <Footer /> */}
       </div>
     </div>
   );
