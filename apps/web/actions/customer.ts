@@ -10,19 +10,27 @@ export async function addCustomer(props: {
   pubkey: string;
   store_id: string;
 }): Promise<string> {
-  const { name, email, pubkey, store_id } = props;
+  const { name = null, email = null, pubkey = null, store_id } = props;
 
+  // TO-DO
   if (!store_id) {
     // return {}
   }
+
+  if (!email && !pubkey) {
+    // return {}
+  }
+
+  // TO-DO
+  // Format pubkey
 
   // Find if customer exist
   const query = {
     customer: {
       $: {
         where: {
-          email,
-          pubkey,
+          email: email || '',
+          pubkey: pubkey || '',
         },
       },
     },
@@ -44,9 +52,9 @@ export async function addCustomer(props: {
       store_id,
 
       // Data
-      name: name ?? null,
-      email: email ?? null,
-      pubkey: pubkey ?? null,
+      name,
+      email,
+      pubkey,
 
       // Status
       created_at: Date.now(),

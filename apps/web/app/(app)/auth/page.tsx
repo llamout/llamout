@@ -41,15 +41,9 @@ export default function Page() {
     );
   }
 
-  // useEffect(() => {
-  //   if (hasStore?.id) {
-  //     router.push(`/dashboard/${hasStore?.id}`);
-  //   }
-
-  //   if (!!user && !hasStore?.id) {
-  //     router.push(`/onboarding`);
-  //   }
-  // }, [hasStore, user]);
+  if (hasStore?.id) {
+    router.push(`/dashboard/${hasStore?.id}`);
+  }
 
   if (isLoading) {
     return (
