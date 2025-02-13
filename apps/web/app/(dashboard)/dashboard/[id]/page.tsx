@@ -108,7 +108,7 @@ export default function Page() {
 
   return (
     <>
-      {orderPaids?.length + 6 >= LIMIT_SALES_FREE && (
+      {!store?.has_suscription && orderPaids?.length + 6 >= LIMIT_SALES_FREE && (
         <div className='relative overflow-hidden flex flex-col gap-4 w-full p-8 bg-foreground text-background rounded-lg'>
           <div className='flex flex-col md:flex-row justify-between gap-4 md:gap-8'>
             <div className='relative z-10 flex flex-col gap-2'>
