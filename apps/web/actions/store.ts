@@ -27,6 +27,7 @@ export async function addStore(props: {
       name: name ?? null,
       website: normalizeUrl(website) ?? null,
       lnaddress: lnaddress ?? null,
+      has_suscription: false,
 
       // Status
       created_at: Date.now(),
