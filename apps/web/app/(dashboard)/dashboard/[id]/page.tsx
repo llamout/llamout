@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { BadgeDollarSign, Contact, LoaderCircle, ReceiptText } from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@workspace/ui/components/card';
@@ -19,8 +19,9 @@ import { SaleSection } from '@/components/dashboard/sale-section';
 
 export default function Page() {
   const params = useParams<{ id: string }>();
+  const router = useRouter();
 
-  const { user } = db.useAuth();
+  const { user, isLoading } = db.useAuth();
 
   // Get Store
   const queryStore = {
@@ -57,15 +58,8 @@ export default function Page() {
 
   const { data: dataDashboard } = db.useQuery(queryDashboard);
 
-  if (!user) {
-    return (
-      <div className='flex min-h-svh items-center justify-center bg-background'>
-        <div className='flex flex-col items-center gap-4 max-w-sm text-center'>
-          <LoaderCircle className='size-8 animate-spin' />
-          <h2 className='text-lg font-bold'>Loading User</h2>
-        </div>
-      </div>
-    );
+  if (!isLoading && !user) {
+    router.push(`/auth`);
   }
 
   if (!store) {
