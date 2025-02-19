@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import { Analytics } from '@vercel/analytics/react';
 import { GoogleAnalytics } from '@next/third-parties/google';
 
@@ -46,6 +47,8 @@ export const metadata: Metadata = {
   manifest: `${process.env.NEXT_PUBLIC_APP_URL}/site.webmanifest`,
 };
 
+const CRISP_ID = process.env.CRISP_ID;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -55,6 +58,24 @@ export default function RootLayout({
     <html lang='en'>
       <head>
         <link href='https://fonts.cdnfonts.com/css/satoshi' rel='stylesheet' />
+        <Script
+          id='crisp-chat'
+          strategy='afterInteractive'
+          dangerouslySetInnerHTML={{
+            __html: `
+            window.$crisp = [];
+            window.CRISP_WEBSITE_ID = "${CRISP_ID}";
+            (function() {
+              var d = document;
+              var s = d.createElement("script");
+              s.src = "https://client.crisp.chat/l.js";
+              s.async = 1;
+              d.getElementsByTagName("head")[0].appendChild(s);
+            })();
+          `,
+          }}
+        />
+        {/* <script type='text/javascript'></script> */}
       </head>
       <body className={`antialiased`}>
         {children}
