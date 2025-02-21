@@ -5,6 +5,7 @@ import { Check, Heart, LoaderCircle } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useSearchParams } from 'next/navigation';
+import Lottie from 'lottie-react';
 
 import { Button } from '@workspace/ui/components/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@workspace/ui/components/accordion';
@@ -16,6 +17,8 @@ import { Card, CardContent } from '@workspace/ui/components/card';
 import { addOrder, modifyOrder } from '@/actions/order';
 import { generatePayment, listenPayment } from '@/actions/payment';
 import { addCustomer } from '@/actions/customer';
+
+import animationCheck from '../../public/animation-check.json';
 
 type InformationProps = {
   store: any;
@@ -175,24 +178,32 @@ export function Copyable({ value, label }: { value: string; label: string }) {
 type PaymentProps = {
   invoice: string;
   store: any;
+  isPaid: boolean;
 };
 
-export function Payment({ invoice, store }: PaymentProps) {
+export function Payment({ invoice, store, isPaid }: PaymentProps) {
   return (
     <div className='flex flex-col gap-4'>
       <Card>
         <CardContent className='pt-6'>
           <div className='flex flex-col items-center gap-4'>
             <div className='p-2 md:p-4 bg-white rounded-lg'>
-              {invoice ? (
-                <QRCodeSVG
-                  size={260}
-                  value={invoice}
-                  imageSettings={{ src: store?.image, height: 32, width: 32, excavate: true }}
-                />
-              ) : (
-                <Skeleton className='w-[260px] h-[260px] bg-black' />
+              {isPaid && (
+                <div className='absolute z-10 flex justify-center items-center w-[260px] h-[260px] rounded-lg'>
+                  <Lottie animationData={animationCheck} loop={false} />
+                </div>
               )}
+              <div className={isPaid ? 'opacity-20 blur-md' : 'opacity-100 blur-0'}>
+                {invoice ? (
+                  <QRCodeSVG
+                    size={260}
+                    value={invoice}
+                    imageSettings={{ src: store?.image || '/iso.png', height: 32, width: 32, excavate: true }}
+                  />
+                ) : (
+                  <Skeleton className='w-[260px] h-[260px] bg-black' />
+                )}
+              </div>
             </div>
             <p className='text-center text-muted-foreground'>
               Remember to pay with a Bitcoin wallet using Lightning Network.
@@ -251,6 +262,7 @@ export function CustomAccordion(props: CustomAccordion) {
   const [orderId, setOrderId] = useState<string>('');
   const [invoice, setInvoice] = useState<string>('');
   const [verify, setVerify] = useState<string>('');
+  const [isPaid, setIsPaid] = useState<boolean>(false);
 
   const price = product?.price[0]?.price * quantity;
 
@@ -263,7 +275,10 @@ export function CustomAccordion(props: CustomAccordion) {
         onPaymentConfirmed: async (isPaid) => {
           if (isPaid) {
             modifyOrder(orderId);
-            handleComplete('payment');
+            setIsPaid(true);
+            setTimeout(() => {
+              handleComplete('payment');
+            }, 2000);
           }
         },
         onPaymentFailed: () => {
@@ -359,7 +374,7 @@ export function CustomAccordion(props: CustomAccordion) {
           {/* {isCompleted('payment') && <span className='text-sm text-green-500'>Completed</span>} */}
         </AccordionTrigger>
         <AccordionContent>
-          <Payment store={store} invoice={invoice} />
+          <Payment store={store} invoice={invoice} isPaid={isPaid} />
         </AccordionContent>
       </AccordionItem>
 
