@@ -28,7 +28,7 @@ export default function Page() {
           <Features id='features' />
           <div className='relative z-10'>
             <ScreenPreview>
-              <CheckoutProvider readOnly={true} store={STORE} product={PRODUCT} />
+              <CheckoutProvider checkout={{}} readOnly={true} store={STORE} product={PRODUCT} />
             </ScreenPreview>
             <div className='absolute z-10 bottom-0 w-full h-full bg-gradient-to-t from-background via-5% via-background/100  to-background/0'></div>
           </div>
