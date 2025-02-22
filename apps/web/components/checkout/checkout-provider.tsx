@@ -14,11 +14,13 @@ import { CustomAccordion } from './custom-accordion';
 export function CheckoutProvider({
   store,
   product,
+  checkout,
   readOnly = false,
   isSoldOut = false,
 }: {
   store: any;
   product: any;
+  checkout: any;
   readOnly?: boolean;
   isSoldOut?: boolean;
 }) {
@@ -123,7 +125,13 @@ export function CheckoutProvider({
         ) : (
           <div className='flex flex-col justify-center items-center w-full'>
             <div className='flex-1 flex w-full max-w-md h-full px-4 py-8 md:py-24'>
-              <CustomAccordion readOnly={readOnly} quantity={quantity} store={store} product={product} />
+              <CustomAccordion
+                readOnly={readOnly}
+                quantity={quantity}
+                store={store}
+                product={product}
+                checkout={checkout}
+              />
             </div>
           </div>
         )}

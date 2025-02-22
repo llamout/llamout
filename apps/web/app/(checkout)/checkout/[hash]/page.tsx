@@ -53,7 +53,7 @@ export default async function Page({ params }: Props) {
     );
   }
 
-  const { store, product } = data;
+  const { store, product, checkout } = data;
   const { data: dataOrders } = await getPaidOrders(store?.id);
 
   return (
@@ -61,6 +61,7 @@ export default async function Page({ params }: Props) {
       <CheckoutProvider
         store={store}
         product={product}
+        checkout={checkout}
         isSoldOut={!store?.has_suscription && dataOrders?.length === LIMIT_SALES_FREE}
       />
     </div>

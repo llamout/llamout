@@ -4,7 +4,7 @@ import { Suspense, useEffect, useState } from 'react';
 import { Check, Heart, LoaderCircle } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Lottie from 'lottie-react';
 
 import { Button } from '@workspace/ui/components/button';
@@ -249,44 +249,61 @@ type Step = 'information' | 'payment' | 'summary';
 interface CustomAccordion {
   store: any;
   product: any;
+  checkout: any;
   quantity: number;
   readOnly: boolean;
 }
 
 export function CustomAccordion(props: CustomAccordion) {
-  const { store, product, quantity, readOnly = false } = props;
+  const { store, product, quantity, readOnly = false, checkout } = props;
+
+  const router = useRouter();
 
   const [activeStep, setActiveStep] = useState<Step>('information');
   const [completedSteps, setCompletedSteps] = useState<Step[]>([]);
 
-  const [orderId, setOrderId] = useState<string>('');
+  const [orderHash, setOrderHash] = useState<string>('');
   const [invoice, setInvoice] = useState<string>('');
   const [verify, setVerify] = useState<string>('');
   const [isPaid, setIsPaid] = useState<boolean>(false);
 
   const price = product?.price[0]?.price * quantity;
 
+  console.log('checkout', checkout);
+
   useEffect(() => {
-    if (orderId && verify) {
+    if (orderHash && verify) {
       listenPayment({
         verifyUrl: verify,
         intervalMs: 5000,
         maxRetries: 48,
         onPaymentConfirmed: async (isPaid) => {
           if (isPaid) {
-            modifyOrder(orderId);
+            modifyOrder(orderHash);
             setIsPaid(true);
+            if (!checkout?.success_url) {
+              setTimeout(() => {
+                handleComplete('payment');
+              }, 1400);
+
+              return;
+            }
+
+            const url = checkout?.success_url.replace('{ORDER_ID}', orderHash);
+
             setTimeout(() => {
-              handleComplete('payment');
-            }, 2000);
+              router.push(`http://${url}`);
+              return;
+            }, 1400);
           }
         },
         onPaymentFailed: () => {
           console.log('Payment verification failed after maximum retries.');
+          return;
         },
       });
     }
-  }, [orderId, verify]);
+  }, [orderHash, verify]);
 
   const handleComplete = (step: Step) => {
     setCompletedSteps([...completedSteps, step]);
@@ -334,7 +351,7 @@ export function CustomAccordion(props: CustomAccordion) {
               store={store}
               disabled={readOnly}
               onComplete={async (id) => {
-                const _id = await addOrder({
+                const hash = await addOrder({
                   // Relations
                   store_id: String(store?.id),
                   product_id: String(product?.id),
@@ -345,7 +362,7 @@ export function CustomAccordion(props: CustomAccordion) {
                   quantity,
                 });
 
-                setOrderId(_id);
+                setOrderHash(hash);
                 handleComplete('information');
 
                 // General Payment
@@ -378,20 +395,22 @@ export function CustomAccordion(props: CustomAccordion) {
         </AccordionContent>
       </AccordionItem>
 
-      <AccordionItem value='summary'>
-        <AccordionTrigger className='flex justify-between p-4' disabled={!isCompleted('payment')}>
-          <div className='flex items-center gap-2'>
-            <div className='flex justify-center items-center w-8 h-8 rounded-full bg-white border'>
-              {renderIcon('summary')}
+      {!checkout?.success_url && (
+        <AccordionItem value='summary'>
+          <AccordionTrigger className='flex justify-between p-4' disabled={!isCompleted('payment')}>
+            <div className='flex items-center gap-2'>
+              <div className='flex justify-center items-center w-8 h-8 rounded-full bg-white border'>
+                {renderIcon('summary')}
+              </div>
+              <span>Summary</span>
             </div>
-            <span>Summary</span>
-          </div>
-          {/* {isCompleted('summary') && <span className='text-sm text-green-500'>Completed</span>} */}
-        </AccordionTrigger>
-        <AccordionContent>
-          <Summary />
-        </AccordionContent>
-      </AccordionItem>
+            {/* {isCompleted('summary') && <span className='text-sm text-green-500'>Completed</span>} */}
+          </AccordionTrigger>
+          <AccordionContent>
+            <Summary />
+          </AccordionContent>
+        </AccordionItem>
+      )}
     </Accordion>
   );
 }
