@@ -7,9 +7,16 @@ import { Textarea } from '@workspace/ui/components/textarea';
 import { Select, SelectTrigger, SelectValue } from '@workspace/ui/components/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@workspace/ui/components/tabs';
 // import { Switch } from '@workspace/ui/components/switch';
+import { useToast } from '@workspace/ui/hooks/use-toast';
 import { Badge } from '@workspace/ui/components/badge';
+import { formatBigNumbers } from '@/lib/number';
+
+import { LIMIT_PRICE_PRODUCT } from '@/config/system';
 
 export function ProductStep({ data, updateData }: { data: any; updateData: (value: any) => void }) {
+  // Hooks
+  const { toast } = useToast();
+
   // const [showYearlyPricing, setShowYearlyPricing] = useState(false);
 
   return (
@@ -71,8 +78,20 @@ export function ProductStep({ data, updateData }: { data: any; updateData: (valu
                   id='price'
                   type='number'
                   placeholder='0'
-                  value={data?.prices[0]?.price ?? null}
+                  value={data?.prices[0]?.price ?? ''}
                   onChange={(e) => {
+                    if (
+                      Number(e.target.value) === LIMIT_PRICE_PRODUCT ||
+                      Number(e.target.value) > LIMIT_PRICE_PRODUCT
+                    ) {
+                      toast({
+                        variant: 'destructive',
+                        title: 'Oops!',
+                        description: `Maximum amount ${formatBigNumbers(LIMIT_PRICE_PRODUCT)} SATs`,
+                      });
+                      return;
+                    }
+
                     if (Number(e.target.value) > 0) {
                       updateData({
                         ...data,
