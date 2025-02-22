@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { LoaderCircle } from 'lucide-react';
 
 import { Button } from '@workspace/ui/components/button';
 import { Awful } from '@workspace/ui/components/icons/awful';
@@ -20,7 +21,6 @@ import { useToast } from '@workspace/ui/hooks/use-toast';
 import { addNps } from '@/actions/nps';
 
 import { CharacterLimitedTextarea } from './character-limited-textarea';
-
 const ratingOptions = [
   { icon: Awful, label: 'Awful', value: 1 },
   { icon: Poor, label: 'Poor', value: 2 },
@@ -85,17 +85,20 @@ export function Feedback() {
     value: 0,
   });
   const [selected, setSelected] = useState<number>(0);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    setLoading(true);
 
     const { error } = await addNps({
-      order_id: order || '',
+      order_hash: order || '',
       description: data?.description,
       value: data?.value,
     });
 
     if (error) {
+      setLoading(false);
       setSubmit(false);
       toast({
         variant: 'destructive',
@@ -147,8 +150,8 @@ export function Feedback() {
               maxLength={500}
               onChange={handleDescriptionChange}
             />
-            <Button id='btn-thank-feedback-submit' type='submit' disabled={selected === 0}>
-              Submit feedback
+            <Button id='btn-thank-feedback-submit' type='submit' disabled={selected === 0 || loading}>
+              {loading ? <LoaderCircle className='size-8 animate-spin' /> : 'Submit feedback'}
             </Button>
           </form>
         </div>
