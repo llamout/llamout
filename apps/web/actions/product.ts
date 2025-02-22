@@ -99,12 +99,21 @@ export async function getProduct(hash: string): Promise<{ error: any; data: any 
           },
         },
       },
+      checkout: {
+        $: {
+          limit: 1,
+          where: {
+            product_id: _product?.id,
+          },
+        },
+      },
     };
 
-    const { store, price } = await db.query(query);
+    const { store, price, checkout } = await db.query(query);
     const _store = store[0];
+    const _checkout = checkout[0];
 
-    return { error: null, data: { product: { ..._product, price }, store: _store } };
+    return { error: null, data: { product: { ..._product, price }, store: _store, checkout: _checkout } };
   } catch (error) {
     return { error, data: null };
   }
