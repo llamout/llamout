@@ -64,13 +64,13 @@ export default function Page() {
     );
   }
 
-  if (user && hasStore?.id) {
-    router.push(`/dashboard/${hasStore?.id}`);
-  }
+  // if (user && hasStore?.id) {
+  //   router.push(`/dashboard/${hasStore?.id}`);
+  // }
 
-  if (user && !hasStore?.id) {
-    router.push(`/onboarding`);
-  }
+  // if (user && !hasStore?.id) {
+  //   router.push(`/onboarding`);
+  // }
 
   return (
     <>

@@ -14,11 +14,5 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <>
-      <div className='relative'>
-        <div className=''>{children}</div>
-      </div>
-    </>
-  );
+  return <div className='relative'>{children}</div>;
 }
