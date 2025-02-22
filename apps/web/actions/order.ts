@@ -47,15 +47,32 @@ export async function addOrder(props: AddOrder): Promise<string> {
     }),
   );
 
-  return newId;
+  return hash;
 }
 
-export async function modifyOrder(id: any): Promise<{ error: string | null }> {
-  if (!id) return { error: 'ID required' };
+export async function modifyOrder(hash: any): Promise<{ error: string | null }> {
+  if (!hash) return { error: 'Hash required' };
+
+  const query = {
+    order: {
+      $: {
+        where: {
+          hash,
+        },
+      },
+    },
+  };
+
+  const { order } = await db.query(query);
+  let orderId = '';
+
+  if (order && order.length > 0) {
+    orderId = String(order[0]?.id);
+  }
 
   await db.transact(
     // @ts-ignore
-    db.tx.order[id].update({
+    db.tx.order[orderId].update({
       // Data
       paid: true,
 
