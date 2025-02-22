@@ -41,10 +41,6 @@ export default function Page() {
     );
   }
 
-  if (hasStore?.id) {
-    router.push(`/dashboard/${hasStore?.id}`);
-  }
-
   if (isLoading) {
     return (
       <div className='flex min-h-svh items-center justify-center bg-background'>
@@ -68,6 +64,14 @@ export default function Page() {
     );
   }
 
+  if (user && hasStore?.id) {
+    router.push(`/dashboard/${hasStore?.id}`);
+  }
+
+  if (user && !hasStore?.id) {
+    router.push(`/onboarding`);
+  }
+
   return (
     <>
       <div className='flex min-h-svh items-center justify-center bg-background'>
@@ -80,9 +84,6 @@ export default function Page() {
               </p> */}
           </div>
           <LoginForm />
-          <Button variant='link' asChild>
-            <Link href='/'>Go to Home</Link>
-          </Button>
         </div>
       </div>
     </>
