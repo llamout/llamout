@@ -14,8 +14,10 @@ export default function Page() {
         </div>
         <div className='flex flex-col gap-8 w-full'>
           <div className='flex flex-col gap-2'>
-            <h1 className='text-2xl font-semibold'>Congratulation!</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque, ut?</p>
+            <h1 className='font-semibold text-xl tracking-tighter text-balance'>Your payment sucessfully processed</h1>
+            <p className='text-sm text-muted-foreground'>
+              Thank you for your contribution. We have saved your information and will be receiving updates soon.
+            </p>
           </div>
           <Feedback />
         </div>
