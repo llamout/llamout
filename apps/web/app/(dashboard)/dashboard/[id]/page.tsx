@@ -5,13 +5,9 @@ import { BadgeDollarSign, Contact, LoaderCircle, ReceiptText } from 'lucide-reac
 
 import { Card, CardContent, CardHeader, CardTitle } from '@workspace/ui/components/card';
 import { Satoshi } from '@workspace/ui/components/icons/satoshi';
-import { Progress } from '@workspace/ui/components/progress';
-import { Button } from '@workspace/ui/components/button';
-import { Badge } from '@workspace/ui/components/badge';
 
 import { formatBigNumbers } from '@/lib/number';
 import { db } from '@/lib/database';
-import { LIMIT_SALES_FREE } from '@/config/system';
 
 import { ProductSection } from '@/components/dashboard/product-section';
 import { CustomerSection } from '@/components/dashboard/customer-section';
@@ -108,27 +104,18 @@ export default function Page() {
 
   return (
     <>
-      {!store?.has_suscription && orderPaids?.length + 6 >= LIMIT_SALES_FREE && (
+      {/* {!store?.has_suscription && totalRevenue >= 1000000 && (
         <div className='relative overflow-hidden flex flex-col gap-4 w-full p-8 bg-foreground text-background rounded-lg'>
           <div className='flex flex-col md:flex-row justify-between gap-4 md:gap-8'>
             <div className='relative z-10 flex flex-col gap-2'>
-              <h2 className='text-lg font-semibold'>Total Sales</h2>
-              <p className='text-sm text-muted-foreground'>
-                You are using the free plan, which allows you to make up to {LIMIT_SALES_FREE} sales.
-              </p>
+              <h2 className='text-lg font-semibold'>Total Revenue</h2>
             </div>
-            {/* {orderPaids?.length < LIMIT_SALES_FREE && (
             <Button variant='secondary' size='sm' asChild>
-              <Link
-                href={`http://localhost:3000/checkout/1662cb1a7cbe920d9124b5afa3356163af6d1def89a2bec6b86fdd2cb805fa9d?email=${user?.email}`}
-              >
-                Upgrade
-              </Link>
+              <Link href={`/checkout/${CHECKOUT_PRODUCT_HASH}`}>Update to Pro</Link>
             </Button>
-          )} */}
           </div>
           <div className='relative w-full h-full'>
-            {orderPaids?.length === LIMIT_SALES_FREE && (
+            {totalRevenue === LIMIT_SALES_FREE && (
               <div className='absolute z-10 top-0 left-0 flex justify-center items-center w-full h-full'>
                 <Button className='w-full' variant='ghost' size='lg' disabled={true}>
                   Upgrade <Badge variant='secondary'>Soon</Badge>
@@ -136,23 +123,29 @@ export default function Page() {
               </div>
             )}
             <div
-              className={`relative flex flex-col gap-2 ${orderPaids?.length === LIMIT_SALES_FREE && 'select-none blur-[32px]'}`}
+              className={`relative flex flex-col gap-2 ${totalRevenue === LIMIT_SALES_FREE && 'select-none blur-[32px]'}`}
             >
-              <Progress value={(orderPaids?.length * 100) / LIMIT_SALES_FREE} />
+              <Progress value={(totalRevenue * 100) / LIMIT_SALES_FREE} />
               <div className='flex justify-between w-full'>
                 <div>
-                  <h3 className='text-sm'>Sold out</h3>
-                  <p className='text-2xl font-bold'>{orderPaids?.length}</p>
+                  <h3 className='text-sm'>Revenue</h3>
+                  <div className='flex items-center gap-1'>
+                    <Satoshi className='w-4 h-4 md:w-6 md:h-6' />
+                    <p className='md:text-2xl font-bold'>{formatBigNumbers(totalRevenue)}</p>
+                  </div>
                 </div>
                 <div className='text-end'>
                   <h3 className='text-sm'>Limit</h3>
-                  <p className='text-2xl font-bold'>{LIMIT_SALES_FREE}</p>
+                  <div className='flex items-center gap-1'>
+                    <Satoshi className='w-4 h-4 md:w-6 md:h-6' />
+                    <p className='md:text-2xl font-bold'>{formatBigNumbers(LIMIT_SALES_FREE)}</p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      )}
+      )} */}
 
       <div className='grid gap-4 md:grid-cols-2'>
         <Card>

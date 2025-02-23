@@ -108,7 +108,7 @@ export function ProductSection({ store_id }: { store_id: string }) {
             </div>
             <Dialog>
               <DialogTrigger asChild>
-                <Button className='w-full sm:w-auto' size='lg'>
+                <Button id='cta-dashboard-products-add' className='w-full sm:w-auto' size='lg'>
                   Add Product
                 </Button>
               </DialogTrigger>

@@ -58,11 +58,7 @@ export default async function Page({ params }: Props) {
 
   return (
     <div className='w-screen h-dvh'>
-      <CheckoutProvider
-        store={store}
-        product={product}
-        isSoldOut={!store?.has_suscription && dataOrders?.length === LIMIT_SALES_FREE}
-      />
+      <CheckoutProvider store={store} product={product} isSoldOut={false} />
     </div>
   );
 }
