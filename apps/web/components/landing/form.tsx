@@ -69,7 +69,12 @@ export function Form(props: any) {
               disabled={registered}
             />
             <div className='absolute right-2 top-0 flex items-center h-full'>
-              <Button size='sm' type='submit' disabled={!value || disabled || registered}>
+              <Button
+                size='sm'
+                type='submit'
+                id={showTab === 1 ? 'cta-landing-join-waitlist-nostr' : 'cta-landing-join-waitlist-email'}
+                disabled={!value || disabled || registered}
+              >
                 Join Waitlist
               </Button>
             </div>

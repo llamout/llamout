@@ -64,7 +64,7 @@ export function Information({ onComplete, disabled, store }: InformationProps) {
                 id='name'
                 type='text'
                 placeholder='Satoshi'
-                value={name}
+                defaultValue={name}
                 onChange={(e) => setName(e.target.value)}
                 required
               />
@@ -77,7 +77,7 @@ export function Information({ onComplete, disabled, store }: InformationProps) {
                 id='email'
                 type='email'
                 placeholder='satoshi@bitcoin.org'
-                value={email}
+                defaultValue={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={!!emailParams}
                 required
@@ -93,13 +93,14 @@ export function Information({ onComplete, disabled, store }: InformationProps) {
               id='pubkey'
               type='text'
               placeholder='NIP-05, npub or hex format'
-              value={pubkey}
+              defaultValue={pubkey}
               onChange={(e) => setPubkey(e.target.value)}
               required
             />
           </div>
         )}
         <Button
+          id={variant === 'email' ? 'cta-checkout-pay-email' : 'cta-checkout-pay-pubkey'}
           className='w-full'
           disabled={(variant === 'email' ? !name || !email : !pubkey) || loading || disabled}
           type='submit'

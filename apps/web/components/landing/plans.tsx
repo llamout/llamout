@@ -81,7 +81,13 @@ export function Plans(props: any) {
                     )}
                   </p>
                 </div>
-                <Button variant={plan?.id === 1 ? 'default' : 'secondary'} size='lg' className='w-full' asChild>
+                <Button
+                  id={plan?.id === 1 ? 'cta-landing-plan-free' : 'cta-landing-plan-pro'}
+                  variant={plan?.id === 1 ? 'default' : 'secondary'}
+                  size='lg'
+                  className='w-full'
+                  asChild
+                >
                   <Link href={plan?.button?.link}>{plan?.button?.cta}</Link>
                 </Button>
                 <ul className='flex flex-col gap-4'>

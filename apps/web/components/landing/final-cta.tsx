@@ -9,7 +9,7 @@ export function FinalCTA(props: any) {
         <h2 className='text-4xl font-bold mb-6'>Receive global payments without friction and without limits.</h2>
 
         <div>
-          <Button variant={'secondary'} size='lg' asChild>
+          <Button id='cta-landing-footer' variant={'secondary'} size='lg' asChild>
             <Link href={'https://heyform.net/f/yKjhjaro'}>{'Get in touch'}</Link>
           </Button>
         </div>
