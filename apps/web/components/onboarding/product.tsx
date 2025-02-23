@@ -23,7 +23,7 @@ export function ProductStep({ data, updateData }: { data: any; updateData: (valu
       </div> */}
       <div className='flex flex-col gap-4'>
         <form className='flex flex-col gap-4'>
-          <div className='flex flex-col gap-2'>
+          {/* <div className='flex flex-col gap-2'>
             <Label htmlFor='mediaUrl'>Image URL</Label>
             <Input
               id='mediaUrl'
@@ -31,7 +31,7 @@ export function ProductStep({ data, updateData }: { data: any; updateData: (valu
               value={data?.image}
               onChange={(e) => updateData({ ...data, image: e.target.value })}
             />
-          </div>
+          </div> */}
           <div className='flex flex-col gap-2'>
             <Label htmlFor='productName'>
               Name <span className='text-destructive'>*</span>
@@ -39,7 +39,7 @@ export function ProductStep({ data, updateData }: { data: any; updateData: (valu
             <Input
               id='productName'
               placeholder='Enter product name'
-              value={data?.name}
+              defaultValue={data?.name}
               onChange={(e) => updateData({ ...data, name: e.target.value })}
             />
           </div>
@@ -73,7 +73,7 @@ export function ProductStep({ data, updateData }: { data: any; updateData: (valu
                   id='price'
                   type='number'
                   placeholder='0'
-                  value={data?.prices[0]?.price ?? null}
+                  defaultValue={data?.prices[0]?.price ?? null}
                   onChange={(e) => {
                     if (
                       Number(e.target.value) === LIMIT_PRICE_PRODUCT ||
