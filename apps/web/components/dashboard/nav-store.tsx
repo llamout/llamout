@@ -14,6 +14,7 @@ import {
 } from '@workspace/ui/components/dropdown-menu';
 import { Skeleton } from '@workspace/ui/components/skeleton';
 import { Button } from '@workspace/ui/components/button';
+
 import { db } from '@/lib/database';
 
 export function NavStore() {
@@ -83,7 +84,11 @@ export function NavStore() {
           </DropdownMenuItem>
         </DropdownMenuGroup> */}
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => {
+            db.auth.signOut();
+          }}
+        >
           <LogOut />
           Log out
         </DropdownMenuItem>
