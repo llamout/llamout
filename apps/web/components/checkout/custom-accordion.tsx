@@ -189,7 +189,7 @@ export function Payment({ invoice, store }: PaymentProps) {
                 <QRCodeSVG
                   size={260}
                   value={invoice}
-                  imageSettings={{ src: store?.image, height: 32, width: 32, excavate: true }}
+                  imageSettings={{ src: store?.image || '/icon.png', height: 32, width: 32, excavate: true }}
                 />
               ) : (
                 <Skeleton className='w-[260px] h-[260px] bg-black' />

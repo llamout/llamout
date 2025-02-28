@@ -1,10 +1,13 @@
 'use client';
 
+import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { BadgeDollarSign, Contact, LoaderCircle, ReceiptText } from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@workspace/ui/components/card';
 import { Satoshi } from '@workspace/ui/components/icons/satoshi';
+import { Button } from '@workspace/ui/components/button';
+import { Progress } from '@workspace/ui/components/progress';
 
 import { formatBigNumbers } from '@/lib/number';
 import { db } from '@/lib/database';
@@ -12,6 +15,8 @@ import { db } from '@/lib/database';
 import { ProductSection } from '@/components/dashboard/product-section';
 import { CustomerSection } from '@/components/dashboard/customer-section';
 import { SaleSection } from '@/components/dashboard/sale-section';
+
+import { CHECKOUT_PRODUCT_HASH, LIMIT_SALES_FREE } from '@/config/system';
 
 export default function Page() {
   const params = useParams<{ id: string }>();
@@ -102,38 +107,39 @@ export default function Page() {
   const countOrders = order?.length;
   const countSales = orderPaids?.length > 0 ? (orderPaids?.length * 100) / order?.length : 0;
 
+  const hastLimit = !store?.has_suscription && totalRevenue >= 1000000;
+
   return (
     <>
-      {/* {!store?.has_suscription && totalRevenue >= 1000000 && (
-        <div className='relative overflow-hidden flex flex-col gap-4 w-full p-8 bg-foreground text-background rounded-lg'>
-          <div className='flex flex-col md:flex-row justify-between gap-4 md:gap-8'>
-            <div className='relative z-10 flex flex-col gap-2'>
-              <h2 className='text-lg font-semibold'>Total Revenue</h2>
-            </div>
-            <Button variant='secondary' size='sm' asChild>
+      <div
+        className={`relative overflow-hidden flex gap-4 w-full p-8 bg-foreground text-background rounded-lg ${hastLimit ? 'flex-col items-center' : 'flex-col md:flex-row'}`}
+      >
+        <div
+          className={`flex flex-col md:flex-row justify-between gap-4 md:gap-8 w-full ${hastLimit ? 'items-center' : 'items-start md:items-center'}`}
+        >
+          <div className='relative z-10 flex flex-col gap-2'>
+            <h2 className='text-lg font-semibold'>Total Revenue</h2>
+          </div>
+          {hastLimit && (
+            <Button className='w-full md:w-auto' variant='secondary' size='sm' asChild>
               <Link href={`/checkout/${CHECKOUT_PRODUCT_HASH}`}>Update to Pro</Link>
             </Button>
-          </div>
-          <div className='relative w-full h-full'>
-            {totalRevenue === LIMIT_SALES_FREE && (
-              <div className='absolute z-10 top-0 left-0 flex justify-center items-center w-full h-full'>
-                <Button className='w-full' variant='ghost' size='lg' disabled={true}>
-                  Upgrade <Badge variant='secondary'>Soon</Badge>
-                </Button>
-              </div>
-            )}
-            <div
-              className={`relative flex flex-col gap-2 ${totalRevenue === LIMIT_SALES_FREE && 'select-none blur-[32px]'}`}
-            >
-              <Progress value={(totalRevenue * 100) / LIMIT_SALES_FREE} />
-              <div className='flex justify-between w-full'>
-                <div>
-                  <h3 className='text-sm'>Revenue</h3>
-                  <div className='flex items-center gap-1'>
-                    <Satoshi className='w-4 h-4 md:w-6 md:h-6' />
-                    <p className='md:text-2xl font-bold'>{formatBigNumbers(totalRevenue)}</p>
-                  </div>
+          )}
+        </div>
+        <div className={`relative w-full h-full ${hastLimit ? 'bg-transparent' : 'flex md:justify-end'}`}>
+          <div className='relative flex flex-col gap-2'>
+            {hastLimit && <Progress value={(totalRevenue * 100) / LIMIT_SALES_FREE} />}
+            <div className='flex justify-between w-full'>
+              <div>
+                {hastLimit && <h3 className='text-sm'>Revenue</h3>}
+                <div className='flex items-center gap-1'>
+                  <Satoshi className='w-4 h-4 md:w-6 md:h-6' />
+                  <p className={`font-bold ${hastLimit ? 'md:text-2xl' : 'text-2xl'}`}>
+                    {formatBigNumbers(totalRevenue)}
+                  </p>
                 </div>
+              </div>
+              {hastLimit && (
                 <div className='text-end'>
                   <h3 className='text-sm'>Limit</h3>
                   <div className='flex items-center gap-1'>
@@ -141,24 +147,13 @@ export default function Page() {
                     <p className='md:text-2xl font-bold'>{formatBigNumbers(LIMIT_SALES_FREE)}</p>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
-      )} */}
+      </div>
 
-      <div className='grid gap-4 md:grid-cols-2'>
-        <Card>
-          <CardHeader className='flex flex-row items-center justify-between pb-2'>
-            <CardTitle className='text-sm font-medium'>Total Revenue</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className='flex items-center gap-1'>
-              <Satoshi className='w-6 h-6' />
-              <div className='text-2xl font-bold'>{formatBigNumbers(totalRevenue)}</div>
-            </div>
-          </CardContent>
-        </Card>
+      <div className='grid gap-4 md:grid-cols-3'>
         <Card>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
             <CardTitle className='text-sm font-medium'>Orders</CardTitle>
