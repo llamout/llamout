@@ -250,13 +250,12 @@ type Step = 'information' | 'payment' | 'summary';
 interface CustomAccordion {
   store: any;
   product: any;
-  checkout: any;
   quantity: number;
   readOnly: boolean;
 }
 
 export function CustomAccordion(props: CustomAccordion) {
-  const { store, product, quantity, readOnly = false, checkout } = props;
+  const { store, product, quantity, readOnly = false } = props;
 
   const [activeStep, setActiveStep] = useState<Step>('information');
   const [completedSteps, setCompletedSteps] = useState<Step[]>([]);
