@@ -10,6 +10,7 @@ const nextConfig = {
     CRISP_ID: process.env.NEXT_PUBLIC_CRISP_WEBSITE_ID,
   },
   transpilePackages: ['@workspace/ui'],
+  swcMinify: false,
 };
 
 export default nextConfig;
