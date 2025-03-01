@@ -320,7 +320,7 @@ export function CustomAccordion(props: CustomAccordion) {
               store={store}
               disabled={readOnly}
               onComplete={async (id) => {
-                const _id = await addOrder({
+                const { id: _id, secret } = await addOrder({
                   // Relations
                   store_id: String(store?.id),
                   product_id: String(product?.id),
@@ -337,12 +337,13 @@ export function CustomAccordion(props: CustomAccordion) {
                 // General Payment
                 // TO-DO: Validate LUD16
                 const data = await generatePayment({
-                  lightningAddress: store?.lnaddress,
-                  amount: price,
+                  lnaddress: store?.lnaddress, // Dirección del usuario
+                  amount: Number(product?.price[0]?.price), // Monto total en satoshis
+                  secret,
                 });
 
-                setInvoice(data?.invoice?.pr);
-                setVerify(data?.invoice?.verify);
+                setInvoice(data?.invoice);
+                setVerify(data?.verify);
               }}
             />
           </Suspense>
