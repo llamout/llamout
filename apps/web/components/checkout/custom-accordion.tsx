@@ -5,7 +5,9 @@ import { Check, Heart, LoaderCircle } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useSearchParams } from 'next/navigation';
-import Lottie from 'lottie-react';
+import dynamic from 'next/dynamic';
+
+const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
 
 import { Button } from '@workspace/ui/components/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@workspace/ui/components/accordion';
@@ -191,7 +193,7 @@ export function Payment({ invoice, store, isPaid }: PaymentProps) {
             <div className='p-2 md:p-4 bg-white rounded-lg'>
               {isPaid && (
                 <div className='absolute z-10 flex justify-center items-center w-[260px] h-[260px] rounded-lg'>
-                  {/* <Lottie animationData={animationCheck} loop={false} /> */}
+                  <Lottie animationData={animationCheck} loop={false} />
                 </div>
               )}
               <div className={isPaid ? 'opacity-20 blur-md' : 'opacity-100 blur-0'}>
