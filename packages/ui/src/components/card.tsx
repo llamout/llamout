@@ -5,7 +5,7 @@ import { cn } from '@workspace/ui/lib/utils';
 const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn('flex flex-col rounded-lg border bg-card text-card-foreground shadow-sm', className)}
+    className={cn('overflow-hidden flex flex-col rounded-lg border bg-card text-card-foreground shadow-sm', className)}
     {...props}
   />
 ));
@@ -38,9 +38,7 @@ const CardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDi
 CardContent.displayName = 'CardContent';
 
 const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn('flex items-center p-6 pt-0', className)} {...props} />
-  ),
+  ({ className, ...props }, ref) => <div ref={ref} className={cn('flex items-center p-4', className)} {...props} />,
 );
 CardFooter.displayName = 'CardFooter';
 
