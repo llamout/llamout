@@ -1,12 +1,12 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import { init } from '@instantdb/react';
-import { LogOut } from 'lucide-react';
+import { House, LogOut, SettingsIcon } from 'lucide-react';
 
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -16,6 +16,7 @@ import { Skeleton } from '@workspace/ui/components/skeleton';
 import { Button } from '@workspace/ui/components/button';
 
 import { db } from '@/lib/database';
+import Link from 'next/link';
 
 export function NavStore() {
   const params = useParams<{ id: string }>();
@@ -76,13 +77,21 @@ export function NavStore() {
             </div>
           </div>
         </DropdownMenuLabel>
-        {/* <DropdownMenuSeparator />
+        <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <BadgeCheck />
-            Account
+          <DropdownMenuItem asChild>
+            <Link href={`/dashboard/${store?.id}`}>
+              <House />
+              Dashboard
+            </Link>
           </DropdownMenuItem>
-        </DropdownMenuGroup> */}
+          <DropdownMenuItem asChild>
+            <Link href={`/dashboard/${store?.id}/settings`}>
+              <SettingsIcon />
+              Settings
+            </Link>
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={() => {
