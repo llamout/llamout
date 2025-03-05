@@ -22,7 +22,7 @@ const plans = [
     ],
     button: {
       cta: 'Get Started',
-      link: 'http://localhost:3000/auth?plan=free',
+      link: '/auth?plan=free',
     },
   },
   {
@@ -40,7 +40,7 @@ const plans = [
     ],
     button: {
       cta: 'Get Started',
-      link: 'http://localhost:3000/auth?plan=pro',
+      link: '/auth?plan=pro',
     },
   },
 ];
