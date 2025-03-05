@@ -1,9 +1,10 @@
-import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Moon, ScanLine, Sun } from 'lucide-react';
+import { ScanLine } from 'lucide-react';
 
 import { Button } from '@workspace/ui/components/button';
+
+import { db } from '@/lib/database';
 
 const links = [
   {
@@ -40,6 +41,8 @@ export function Navbar() {
   //   document.documentElement.classList.toggle('dark');
   // };
 
+  const { user } = db.useAuth();
+
   return (
     <section className='relative z-50 flex justify-center w-full'>
       <div className='fixed w-full max-w-4xl px-2 pt-2'>
@@ -57,11 +60,13 @@ export function Navbar() {
               </Button>
             ))}
           </div>
-          <div className='block sm:hidden'>
-            <Button asChild>
-              <Link href='https://heyform.net/f/yKjhjaro'>Get in touch</Link>
-            </Button>
-          </div>
+          {user && (
+            <div className='block'>
+              <Button asChild>
+                <Link href='/auth'>Go to app</Link>
+              </Button>
+            </div>
+          )}
 
           {/* <Button variant='ghost' size='icon' onClick={toggleDarkMode}>
             {isDarkMode ? <Sun className='h-[1.2rem] w-[1.2rem]' /> : <Moon className='h-[1.2rem] w-[1.2rem]' />}

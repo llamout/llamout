@@ -30,19 +30,24 @@ export default function Page() {
   const hasStore = dataStore?.store[0];
 
   // TO-DO
-  if (isLoadingStore) {
-    return (
-      <div className='flex min-h-svh items-center justify-center bg-background'>
-        <div className='flex flex-col items-center gap-4 max-w-sm text-center'>
-          <LoaderCircle className='size-8 animate-spin' />
-          <h2 className='text-lg font-bold'>Loading Store</h2>
-        </div>
-      </div>
-    );
+  // if (isLoadingStore) {
+  //   return (
+  //     <div className='flex min-h-svh items-center justify-center bg-background'>
+  //       <div className='flex flex-col items-center gap-4 max-w-sm text-center'>
+  //         <LoaderCircle className='size-8 animate-spin' />
+  //         <h2 className='text-lg font-bold'>Loading Store</h2>
+  //       </div>
+  //     </div>
+  //   );
+  // }
+
+  if (user && hasStore?.id) {
+    router.push(`/dashboard/${hasStore?.id}`);
+    return;
   }
 
-  if (hasStore?.id) {
-    router.push(`/dashboard/${hasStore?.id}`);
+  if (user && !hasStore) {
+    router.push(`/onboarding`);
   }
 
   if (isLoading) {
