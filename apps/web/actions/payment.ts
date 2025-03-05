@@ -1,3 +1,8 @@
+import { Wallet, createSigner } from '@lawallet/sdk';
+
+const COMMISION_ADDRESS = 'a@lawallet.ar';
+
+// Función para obtener LNURLP (ya existente)
 export async function getLnurlp(lightningAddress: string) {
   try {
     const [username, domain] = lightningAddress.split('@');
@@ -16,6 +21,7 @@ export async function getLnurlp(lightningAddress: string) {
   }
 }
 
+// Función para generar una factura (ya existente)
 export async function generateInvoice(callback: string, amountInSats: number, comment?: string) {
   try {
     const amountInMilliSats = amountInSats * 1000; // Convert sats to millisats
@@ -36,27 +42,93 @@ export async function generateInvoice(callback: string, amountInSats: number, co
   }
 }
 
-interface GeneratePayment {
-  lightningAddress: string;
-  amount: number;
-}
-
-export async function generatePayment(props: GeneratePayment) {
-  const { lightningAddress, amount } = props;
-
+export async function randomWallet(secret: string): Promise<Wallet | any> {
   try {
-    // Get LNURLP
-    const lnurlp = await getLnurlp(lightningAddress);
+    const randomSigner = await createSigner(secret);
+    const wallet = new Wallet({ signer: randomSigner });
 
-    // Generate invoice
-    const invoice = await generateInvoice(lnurlp.callback, amount);
-
-    return { invoice, callback: lnurlp.callback };
+    return wallet;
   } catch (error) {
-    console.error('Error during payment process:', error);
+    console.log('error', error);
+    return null;
   }
 }
 
+// Interfaz para generar un pago con comisión
+interface GeneratePayment {
+  lnaddress: string; // Dirección del usuario final
+  amount: number; // Monto en satoshis
+  secret: string;
+}
+
+export async function generatePayment(props: GeneratePayment) {
+  const { lnaddress, amount, secret } = props;
+
+  try {
+    const account = await randomWallet(secret);
+    const invoice = await account.generateInvoice({
+      milisatoshis: amount * 1000,
+    });
+
+    console.log('Factura generada:', invoice.pr);
+
+    listenPayment({
+      verifyUrl: invoice.verify,
+      intervalMs: 5000,
+      maxRetries: 12,
+      onPaymentConfirmed: async (isPaid) => {
+        if (isPaid) {
+          console.log('Pago confirmado. Distribuyendo fondos...');
+
+          // Enviar el 99.5% al usuario
+          await account.sendTransaction({
+            tokenId: 'BTC',
+            receiver: lnaddress,
+            amount: (amount * 1000) / 2,
+            comment: 'Pago después de comisión',
+            onSuccess: () => {
+              console.log(`Enviados ${(amount * 1000) / 2} sats al usuario (${lnaddress}).`);
+            },
+            onError: () => {
+              console.error('Error al enviar al usuario.');
+            },
+          });
+
+          // Enviar el 0.5% al usuario
+          await distributeFunds(amount, secret);
+        }
+      },
+      onPaymentFailed: () => {
+        console.log('El pago falló o se agotó el tiempo de espera.');
+      },
+    });
+
+    return { invoice: invoice.pr, verify: invoice.verify };
+  } catch (error) {
+    console.error('Error durante el proceso de pago con comisión:', error);
+    throw error;
+  }
+}
+
+// Función para distribuir los fondos después del pago
+async function distributeFunds(totalAmountInSats: number, secret: string) {
+  const account = await randomWallet(secret);
+
+  await account.sendTransaction({
+    tokenId: 'BTC',
+    receiver: COMMISION_ADDRESS,
+    amount: (totalAmountInSats * 1000) / 2,
+    comment: 'Comisión del 0.5%',
+    onSuccess: () => {
+      console.log(`Enviados ${(totalAmountInSats * 1000) / 2} sats como comisión (${COMMISION_ADDRESS}).`);
+    },
+    onError: () => {
+      console.error('Error al enviar la comisión.');
+    },
+  });
+}
+
+// Función para escuchar el estado del pago (ya existente)
 type PaymentStatusResponse = {
   settled: boolean;
 };
