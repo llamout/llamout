@@ -26,7 +26,6 @@ import { toast, useToast } from '@workspace/ui/hooks/use-toast';
 import { Skeleton } from '@workspace/ui/components/skeleton';
 
 import { getLnurlp } from '@/actions/payment';
-import { uploadFile } from '@/actions/upload';
 
 import { db } from '@/lib/database';
 
@@ -69,36 +68,6 @@ export default function Page() {
   const [validLn, setValidLn] = useState(store?.lnaddress ? true : false);
   const [uploadingImage, setUploadingImage] = useState(false);
 
-  async function handleImageUpload(event: React.ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0];
-    if (file) {
-      setUploadingImage(true);
-      const formData = new FormData();
-      formData.append('file', file);
-
-      try {
-        const result = await uploadFile(formData);
-        if (result.status === 'success' && result.data && result.data[0]) {
-          setSettings({ ...settings, image: result.data[0].url });
-          toast({
-            title: 'Image uploaded successfully',
-            description: 'Your store image has been updated.',
-          });
-        } else {
-          throw new Error(result.message);
-        }
-      } catch (error) {
-        toast({
-          variant: 'destructive',
-          title: 'Upload failed',
-          description: String(error),
-        });
-      } finally {
-        setUploadingImage(false);
-      }
-    }
-  }
-
   const handleSubmit = async () => {};
 
   return (
@@ -136,33 +105,12 @@ export default function Page() {
 
                       <div className='flex flex-col'>
                         <div className='flex gap-2'>
-                          <Button
-                            variant={uploadingImage ? 'secondary' : 'default'}
-                            disabled={uploadingImage}
-                            size='sm'
-                            asChild
-                          >
+                          <Button variant={'secondary'} disabled={true} size='sm'>
                             <label htmlFor='picture' className='cursor-pointer'>
-                              {uploadingImage ? <LoaderCircle className='size-8 animate-spin' /> : 'Update image'}
-                              <input
-                                id='picture'
-                                type='file'
-                                accept='image/*'
-                                className='hidden'
-                                onChange={handleImageUpload}
-                                disabled={uploadingImage}
-                              />
+                              {uploadingImage ? <LoaderCircle className='size-8 animate-spin' /> : 'Coming Soon'}
+                              <input id='picture' type='file' accept='image/*' className='hidden' disabled={true} />
                             </label>
                           </Button>
-                          {settings?.image && (
-                            <Button
-                              size='sm'
-                              variant='destructive'
-                              onClick={() => setSettings({ ...settings, image: '' })}
-                            >
-                              <Trash2 />
-                            </Button>
-                          )}
                         </div>
                         <p className='text-xs text-muted-foreground mt-1'>JPG or PNG. Max 2MB.</p>
                       </div>
