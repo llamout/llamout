@@ -41,7 +41,8 @@ export function ProductSection({ store_id }: { store_id: string }) {
     name: string;
     description: string;
     prices: { price: number; currency: string; type: TypeTypes; interval: IntervalTypes | null }[];
-  }>({ image: '', name: '', description: '', prices: [] });
+    success_url: string;
+  }>({ image: '', name: '', description: '', prices: [], success_url: '' });
 
   const query = {
     product: {
@@ -140,6 +141,7 @@ export function ProductSection({ store_id }: { store_id: string }) {
                         name: product?.name,
                         description: product?.description,
                         prices: product?.prices,
+                        success_url: product?.success_url,
                       });
 
                       if (error) {
