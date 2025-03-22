@@ -1,22 +1,9 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-// import { Bolt } from 'lucide-react';
-
-// import { Button } from '@workspace/ui/components/button';
-// import {
-//   Sheet,
-//   SheetContent,
-//   SheetDescription,
-//   SheetHeader,
-//   SheetTitle,
-//   SheetTrigger,
-// } from '@workspace/ui/components/sheet';
-// import { Input } from '@workspace/ui/components/input';
-// import { Label } from '@workspace/ui/components/label';
-
-import { siteConfig } from '@/config/site';
 
 import { NavStore } from '@/components/dashboard/nav-store';
+
+import { siteConfig } from '@/config/site';
 
 export const metadata: Metadata = {
   title: {
@@ -43,42 +30,6 @@ export default function RootLayout({
             </div>
 
             <div className='flex items-center gap-2'>
-              {/* <Sheet>
-                <SheetTrigger asChild>
-                  <Button variant='secondary' size='icon'>
-                    <Bolt />
-                  </Button>
-                </SheetTrigger>
-                <SheetContent>
-                  <SheetHeader>
-                    <div className='flex justify-center items-center w-12 h-12 mx-auto sm:mx-0 bg-gradient-to-t from-background to-transparent border rounded-lg shadow-sm text-muted-foreground'>
-                      <Bolt className='size-6' />
-                    </div>
-                    <SheetTitle>Settings</SheetTitle>
-                    <SheetDescription>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta, debitis.
-                    </SheetDescription>
-                  </SheetHeader>
-
-                  <div className='mt-8'>
-                    <div className='grid gap-2'>
-                      <Label htmlFor='email'>Success URL</Label>
-                      <Input
-                        id='email'
-                        type='email'
-                        placeholder='https://example.com/thanks?order_id={ORDER_ID}'
-                        // value={email}
-                        // onChange={(e) => setEmail(e.target.value)}
-                        required
-                      />
-                      <p className='text-sm'>
-                        Include <strong>{`{ORDER_ID}`}</strong> to receive the Order ID on success.
-                      </p>
-                    </div>
-                  </div>
-                </SheetContent>
-              </Sheet> */}
-
               <NavStore />
             </div>
           </div>
