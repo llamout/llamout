@@ -1,10 +1,14 @@
+import { useState } from 'react';
+import { Plus } from 'lucide-react';
+
+import { useToast } from '@workspace/ui/hooks/use-toast';
 import { Input } from '@workspace/ui/components/input';
 import { Label } from '@workspace/ui/components/label';
 import { Textarea } from '@workspace/ui/components/textarea';
 import { Select, SelectTrigger, SelectValue } from '@workspace/ui/components/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@workspace/ui/components/tabs';
 import { Badge } from '@workspace/ui/components/badge';
-import { useToast } from '@workspace/ui/hooks/use-toast';
+import { Button } from '@workspace/ui/components/button';
 
 import { formatBigNumbers } from '@/lib/number';
 
@@ -13,6 +17,9 @@ import { LIMIT_PRICE_PRODUCT } from '@/config/system';
 export function ProductStep({ data, updateData }: { data: any; updateData: (value: any) => void }) {
   // Hooks
   const { toast } = useToast();
+
+  // Component
+  const [showSuccessUrl, setShowSuccessUrl] = useState(false);
 
   return (
     <div className='flex flex-col gap-8'>
@@ -51,6 +58,24 @@ export function ProductStep({ data, updateData }: { data: any; updateData: (valu
               value={data?.description}
               onChange={(e) => updateData({ ...data, description: e.target.value })}
             />
+          </div>
+          <div className='flex flex-col gap-2'>
+            {showSuccessUrl ? (
+              <>
+                <Label htmlFor='success'>Success URL</Label>
+                <Input
+                  id='success'
+                  placeholder='https://example.com/thanks?order_id={ORDER_ID}'
+                  defaultValue={''}
+                  onChange={(e) => updateData({ ...data, success_url: e.target.value })}
+                />
+              </>
+            ) : (
+              <Button variant='ghost' onClick={() => setShowSuccessUrl(true)}>
+                <Plus />
+                Add Success URL
+              </Button>
+            )}
           </div>
         </form>
 
