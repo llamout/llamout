@@ -65,10 +65,13 @@ export function ProductStep({ data, updateData }: { data: any; updateData: (valu
                 <Label htmlFor='success'>Success URL</Label>
                 <Input
                   id='success'
-                  placeholder='https://example.com/thanks?order_id={ORDER_ID}'
+                  placeholder='https://example.com/thanks?order={ORDER_HASH}'
                   defaultValue={''}
                   onChange={(e) => updateData({ ...data, success_url: e.target.value })}
                 />
+                <p className='text-sm'>
+                  Include <strong>{`{ORDER_HASH}`}</strong> to receive the Order Hash on success.
+                </p>
               </>
             ) : (
               <Button variant='ghost' onClick={() => setShowSuccessUrl(true)}>
@@ -80,15 +83,15 @@ export function ProductStep({ data, updateData }: { data: any; updateData: (valu
         </form>
 
         <Tabs className='w-full' defaultValue='one_payment'>
-          <TabsList className='w-full'>
+          {/* <TabsList className='w-full'>
             <TabsTrigger className='w-full' value='one_payment'>
               One Pay
             </TabsTrigger>
             <TabsTrigger className='w-full' value='subscription' disabled={true}>
               Subscription <Badge className='ml-2'>Soon</Badge>
             </TabsTrigger>
-          </TabsList>
-          <TabsContent value='one_payment'>
+          </TabsList> */}
+          <TabsContent tabIndex={-1} value='one_payment'>
             <div className='flex gap-4'>
               <div className='flex flex-col gap-2 w-full'>
                 <Label htmlFor='price'>

@@ -122,7 +122,7 @@ export function ProductSection({ store_id }: { store_id: string }) {
                   <ProductStep data={product} updateData={setProduct} />
                 </DialogBody>
                 <DialogFooter>
-                  <DialogClose asChild>
+                  <DialogClose tabIndex={1} asChild>
                     <Button className='w-full' size='lg' type='button' variant='secondary'>
                       Cancel
                     </Button>

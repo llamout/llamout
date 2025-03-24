@@ -248,7 +248,7 @@ export function Summary() {
 }
 
 function replaceUrl(url: string, order_id: string): string {
-  return url.replace('{ORDER_ID}', order_id);
+  return url.replace('{ORDER_HASH}', order_id);
 }
 
 type Step = 'information' | 'payment' | 'summary';
