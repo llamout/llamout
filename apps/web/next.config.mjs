@@ -13,6 +13,31 @@ const nextConfig = {
   images: {
     domains: ['nostr.build'],
   },
+  async headers() {
+    return [
+      {
+        source: '/api/v1/:path*',
+        headers: [
+          {
+            key: 'Access-Control-Allow-Origin',
+            value: '*',
+          },
+          {
+            key: 'Access-Control-Allow-Methods',
+            value: 'GET',
+          },
+          {
+            key: 'Access-Control-Allow-Headers',
+            value: 'Content-Type, Authorization, ll-api-key',
+          },
+          {
+            key: 'Access-Control-Max-Age',
+            value: '86400',
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;
