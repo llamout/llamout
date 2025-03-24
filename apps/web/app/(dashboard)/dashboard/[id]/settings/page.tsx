@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { AlertCircle, Check, LoaderCircle, SquareArrowOutUpRight, Trash2 } from 'lucide-react';
+import { AlertCircle, Check, LoaderCircle, SquareArrowOutUpRight } from 'lucide-react';
 
 import {
   AlertDialog,
@@ -24,6 +24,7 @@ import { Label } from '@workspace/ui/components/label';
 import { Input } from '@workspace/ui/components/input';
 import { toast, useToast } from '@workspace/ui/hooks/use-toast';
 import { Skeleton } from '@workspace/ui/components/skeleton';
+import { ApiKeyCard } from '@/components/dashboard/settings/api-key-card';
 
 import { getLnurlp } from '@/actions/payment';
 
@@ -67,6 +68,8 @@ export default function Page() {
   const [lnaddress, setLnaddress] = useState(store?.lnaddress || '');
   const [validLn, setValidLn] = useState(store?.lnaddress ? true : false);
   const [uploadingImage, setUploadingImage] = useState(false);
+
+  if (!store) return null;
 
   const handleSubmit = async () => {};
 
@@ -229,6 +232,8 @@ export default function Page() {
             </CardFooter>
           </Card>
         </form>
+
+        <ApiKeyCard secret={store?.api_key} />
 
         {/* Delete store */}
         <Card className='border-destructive/50'>
