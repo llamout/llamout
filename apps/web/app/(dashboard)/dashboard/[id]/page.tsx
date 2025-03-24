@@ -36,7 +36,7 @@ export default function Page() {
     },
   };
 
-  const { data: dataStore } = db.useQuery(queryStore);
+  const { data: dataStore, isLoading: isLoadingStore } = db.useQuery(queryStore);
   const store = dataStore?.store[0];
 
   // Get data for dashboard
@@ -61,6 +61,12 @@ export default function Page() {
 
   if (!isLoading && !user) {
     router.push(`/auth`);
+    return null;
+  }
+
+  if (!isLoadingStore && !store) {
+    router.push(`/onboarding`);
+    return null;
   }
 
   if (!store) {
