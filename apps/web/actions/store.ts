@@ -4,6 +4,7 @@ import { id } from '@instantdb/core';
 
 import { db } from '@/config/instantdb';
 import { normalizeUrl } from '@/lib/utils';
+import { generateHash } from '@/lib/crypto';
 
 export async function addStore(props: {
   user_id: string;
@@ -16,6 +17,7 @@ export async function addStore(props: {
 
   // If not exist, create
   const newId = id();
+  const hash = generateHash();
 
   await db.transact(
     // @ts-ignore
@@ -28,6 +30,7 @@ export async function addStore(props: {
       website: normalizeUrl(website) ?? null,
       lnaddress: lnaddress ?? null,
       has_suscription: false,
+      api_key: hash,
 
       // Status
       created_at: Date.now(),
