@@ -51,7 +51,7 @@ export function ApiKeyCard({ secret }: { secret: string | null }) {
               {showApiKey ? <EyeOff className='h-4 w-4' /> : <Eye className='h-4 w-4' />}
             </Button>
           </div>
-          <p className='text-muted-foreground'>
+          <p className='text-sm text-muted-foreground'>
             Keep this key secure. Don't share it publicly or include it in client-side code.
           </p>
         </div>
@@ -64,19 +64,19 @@ export function ApiKeyCard({ secret }: { secret: string | null }) {
           <TabsContent value='setup' className='space-y-4'>
             <div className='space-y-2'>
               <h4 className='font-medium'>Header Configuration</h4>
-              <p className='text-muted-foreground'>
+              <p className='text-sm text-muted-foreground'>
                 Include your API Key in the header <code className='text-foreground'>ll-api-key</code> of your HTTP
                 requests:
               </p>
               <CodeBlock code={`ll-api-key: ${showApiKey ? secret.substring(0, 10) + '...' : '******'}`} />
-              <p className='text-muted-foreground mt-2'>
+              <p className='text-sm text-muted-foreground mt-2'>
                 This header is required to authenticate all your requests to the Llamout API.
               </p>
             </div>
 
             <div className='space-y-2'>
               <h4 className='font-medium'>Available endpoints</h4>
-              <ul className='space-y-1 text-muted-foreground'>
+              <ul className='space-y-1 text-sm text-muted-foreground'>
                 <li>
                   <code className='text-foreground'>/api/v1/verify</code> - Check if an order has been paid
                 </li>
@@ -86,7 +86,7 @@ export function ApiKeyCard({ secret }: { secret: string | null }) {
           <TabsContent value='verify' className='space-y-4'>
             <div className='space-y-2'>
               <h4 className='font-medium'>Verify an Order</h4>
-              <p className='text-muted-foreground'>
+              <p className='text-sm text-muted-foreground'>
                 To check if an order has been paid, use the endpoint{' '}
                 <code className='text-foreground'>/api/v1/verify</code> with the parameter{' '}
                 <code className='text-foreground'>orderHash</code>:
