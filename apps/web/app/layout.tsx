@@ -44,7 +44,7 @@ export const metadata: Metadata = {
   icons: {
     icon: '/icon.png',
   },
-  manifest: `${process.env.NEXT_PUBLIC_APP_URL}/site.webmanifest`,
+  // manifest: `${process.env.NEXT_PUBLIC_APP_URL}/site.webmanifest`,
 };
 
 const CRISP_ID = process.env.CRISP_ID;
