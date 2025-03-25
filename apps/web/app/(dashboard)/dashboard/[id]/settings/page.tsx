@@ -77,7 +77,7 @@ export default function Page() {
     <>
       <div className=''>
         <h1 className='text-3xl font-bold tracking-tight'>Settings</h1>
-        <p className='text-muted-foreground mt-2'>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+        {/* <p className='text-muted-foreground mt-2'>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p> */}
       </div>
 
       <div className='grid gap-8'>

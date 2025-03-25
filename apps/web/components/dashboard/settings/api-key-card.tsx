@@ -68,7 +68,7 @@ export function ApiKeyCard({ secret }: { secret: string | null }) {
                 Include your API Key in the header <code className='text-foreground'>ll-api-key</code> of your HTTP
                 requests:
               </p>
-              <CodeBlock code={`ll-api-key: ${showApiKey ? secret.substring(0, 10) + '...' : maskedApiKey}`} />
+              <CodeBlock code={`ll-api-key: ${showApiKey ? secret.substring(0, 10) + '...' : '******'}`} />
               <p className='text-muted-foreground mt-2'>
                 This header is required to authenticate all your requests to the Llamout API.
               </p>
