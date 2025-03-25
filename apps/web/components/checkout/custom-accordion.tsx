@@ -4,7 +4,7 @@ import { Suspense, useEffect, useState } from 'react';
 import { Check, Heart, LoaderCircle } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
 
 const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
@@ -247,6 +247,10 @@ export function Summary() {
   );
 }
 
+function replaceUrl(url: string, order_id: string): string {
+  return url.replace('{ORDER_HASH}', order_id);
+}
+
 type Step = 'information' | 'payment' | 'summary';
 
 interface CustomAccordion {
@@ -258,6 +262,8 @@ interface CustomAccordion {
 
 export function CustomAccordion(props: CustomAccordion) {
   const { store, product, quantity, readOnly = false } = props;
+
+  const router = useRouter();
 
   const [activeStep, setActiveStep] = useState<Step>('information');
   const [completedSteps, setCompletedSteps] = useState<Step[]>([]);
@@ -279,11 +285,14 @@ export function CustomAccordion(props: CustomAccordion) {
           if (isPaid) {
             modifyOrder(orderId);
             setIsPaid(true);
-            // if (!checkout?.success_url) {
             setTimeout(() => {
-              handleComplete('payment');
+              if (!product?.success_url) {
+                handleComplete('payment');
+              } else {
+                const newUrl = replaceUrl(product?.success_url, orderId);
+                router.push(newUrl);
+              }
             }, 1400);
-            // }
           }
         },
         onPaymentFailed: () => {
@@ -383,20 +392,22 @@ export function CustomAccordion(props: CustomAccordion) {
         </AccordionContent>
       </AccordionItem>
 
-      <AccordionItem value='summary'>
-        <AccordionTrigger className='flex justify-between p-4' disabled={!isCompleted('payment')}>
-          <div className='flex items-center gap-2'>
-            <div className='flex justify-center items-center w-8 h-8 rounded-full bg-white border'>
-              {renderIcon('summary')}
+      {!product?.success_url && (
+        <AccordionItem value='summary'>
+          <AccordionTrigger className='flex justify-between p-4' disabled={!isCompleted('payment')}>
+            <div className='flex items-center gap-2'>
+              <div className='flex justify-center items-center w-8 h-8 rounded-full bg-white border'>
+                {renderIcon('summary')}
+              </div>
+              <span>Summary</span>
             </div>
-            <span>Summary</span>
-          </div>
-          {/* {isCompleted('summary') && <span className='text-sm text-green-500'>Completed</span>} */}
-        </AccordionTrigger>
-        <AccordionContent>
-          <Summary />
-        </AccordionContent>
-      </AccordionItem>
+            {/* {isCompleted('summary') && <span className='text-sm text-green-500'>Completed</span>} */}
+          </AccordionTrigger>
+          <AccordionContent>
+            <Summary />
+          </AccordionContent>
+        </AccordionItem>
+      )}
     </Accordion>
   );
 }

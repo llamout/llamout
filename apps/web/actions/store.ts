@@ -4,6 +4,7 @@ import { id } from '@instantdb/core';
 
 import { db } from '@/config/instantdb';
 import { normalizeUrl } from '@/lib/utils';
+import { generateHash } from '@/lib/crypto';
 
 export async function addStore(props: {
   user_id: string;
@@ -16,6 +17,7 @@ export async function addStore(props: {
 
   // If not exist, create
   const newId = id();
+  const hash = generateHash();
 
   await db.transact(
     // @ts-ignore
@@ -28,6 +30,7 @@ export async function addStore(props: {
       website: normalizeUrl(website) ?? null,
       lnaddress: lnaddress ?? null,
       has_suscription: false,
+      api_key: hash,
 
       // Status
       created_at: Date.now(),
@@ -63,4 +66,40 @@ export async function getStore({ user_id }: { user_id: string }): Promise<{ erro
   } catch (error) {
     return { error, data: null };
   }
+}
+
+export async function updateStore({
+  store_id,
+  user_id,
+  image,
+  name,
+  website,
+  lnaddress,
+}: {
+  store_id: string;
+  user_id: string;
+  image: string;
+  name: string;
+  website: string;
+  lnaddress: string;
+}): Promise<{ error: any; data?: any }> {
+  // Validations
+  if (!store_id) return { error: 'Store required' };
+  if (!user_id) return { error: 'User required' };
+
+  await db.transact(
+    // @ts-ignore
+    db.tx.store[store_id].update({
+      // Data
+      image,
+      name,
+      website: normalizeUrl(website) ?? null,
+      lnaddress,
+
+      // Status
+      updated_at: Date.now(),
+    }),
+  );
+
+  return { error: null };
 }

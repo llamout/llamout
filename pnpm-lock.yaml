@@ -24,6 +24,91 @@ importers:
         specifier: 5.5.4
         version: 5.5.4
 
+  apps/demo:
+    dependencies:
+      '@instantdb/admin':
+        specifier: ^0.17.12
+        version: 0.17.12
+      '@instantdb/core':
+        specifier: ^0.17.12
+        version: 0.17.12
+      '@instantdb/react':
+        specifier: ^0.17.12
+        version: 0.17.12
+      '@next/third-parties':
+        specifier: ^15.1.6
+        version: 15.1.6(next@15.1.6(react-dom@19.0.0))
+      '@react-oauth/google':
+        specifier: ^0.12.1
+        version: 0.12.1(react-dom@19.0.0)
+      '@vercel/analytics':
+        specifier: ^1.4.1
+        version: 1.4.1(next@15.1.6(react-dom@19.0.0))
+      '@workspace/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
+      lottie-react:
+        specifier: ^2.4.1
+        version: 2.4.1(react-dom@19.0.0)
+      lucide-react:
+        specifier: 0.456.0
+        version: 0.456.0(react@19.0.0)
+      next:
+        specifier: ^15.1.0
+        version: 15.1.6(react-dom@19.0.0)
+      next-themes:
+        specifier: ^0.4.3
+        version: 0.4.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      nostr-tools:
+        specifier: ^2.10.4
+        version: 2.10.4(typescript@5.7.3)
+      qrcode.react:
+        specifier: ^4.2.0
+        version: 4.2.0
+      react-copy-to-clipboard:
+        specifier: ^5.1.0
+        version: 5.1.0
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.0.0(react@19.0.0)
+      tailwind-merge:
+        specifier: ^2.5.4
+        version: 2.6.0
+    devDependencies:
+      '@types/node':
+        specifier: ^20
+        version: 20.17.17
+      '@types/react':
+        specifier: 18.3.0
+        version: 18.3.0
+      '@types/react-copy-to-clipboard':
+        specifier: ^5.0.7
+        version: 5.0.7
+      '@types/react-dom':
+        specifier: 18.3.1
+        version: 18.3.1
+      '@workspace/eslint-config':
+        specifier: workspace:^
+        version: link:../../packages/eslint-config
+      '@workspace/typescript-config':
+        specifier: workspace:*
+        version: link:../../packages/typescript-config
+      dotenv:
+        specifier: ^16.4.7
+        version: 16.4.7
+      postcss:
+        specifier: ^8
+        version: 8.5.1
+      tailwindcss:
+        specifier: ^3.4.1
+        version: 3.4.17(ts-node@10.9.2(@types/node@20.17.17)(typescript@5.7.3))
+      typescript:
+        specifier: ^5
+        version: 5.7.3
+
   apps/web:
     dependencies:
       '@instantdb/admin':

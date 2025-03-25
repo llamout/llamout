@@ -14,8 +14,12 @@ export async function addProduct(props: {
   name: string;
   description: string;
   prices: { price: number; currency: string; interval: IntervalTypes | null; type: TypeTypes }[];
+  success_url?: string;
 }): Promise<{ error: any; data: any }> {
-  const { store_id, image, name, description, prices } = props;
+  const { store_id, image, name, description, prices, success_url } = props;
+
+  // TO-DO
+  // Format success_url
 
   // If not exist, create
   const newId = id();
@@ -33,6 +37,7 @@ export async function addProduct(props: {
         description: description ?? null,
         hash,
         is_subscription: false,
+        success_url: success_url ?? null,
 
         // Status
         created_at: Date.now(),
