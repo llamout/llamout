@@ -15,7 +15,7 @@ interface AddOrder {
   quantity: number;
 }
 
-export async function addOrder(props: AddOrder): Promise<string> {
+export async function addOrder(props: AddOrder): Promise<{ id: string; secret: string }> {
   const { store_id, customer_id, product_id, price_id, amount, currency = 'SAT', quantity } = props;
 
   // TO-DO
@@ -24,7 +24,7 @@ export async function addOrder(props: AddOrder): Promise<string> {
   }
 
   const newId = id();
-  const hash = generateHash();
+  const { secret, hash } = generateHash();
 
   await db.transact(
     // @ts-ignore
@@ -47,7 +47,7 @@ export async function addOrder(props: AddOrder): Promise<string> {
     }),
   );
 
-  return newId;
+  return { id: newId, secret };
 }
 
 export async function modifyOrder(id: any): Promise<{ error: string | null }> {
