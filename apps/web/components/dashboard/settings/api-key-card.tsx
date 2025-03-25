@@ -61,7 +61,7 @@ export function ApiKeyCard({ secret }: { secret: string | null }) {
             <TabsTrigger value='setup'>Configuration</TabsTrigger>
             <TabsTrigger value='verify'>Verify Orden</TabsTrigger>
           </TabsList>
-          <TabsContent value='setup' className='space-y-4'>
+          <TabsContent tabIndex={-1} value='setup' className='space-y-4'>
             <div className='space-y-2'>
               <h4 className='font-medium'>Header Configuration</h4>
               <p className='text-sm text-muted-foreground'>
@@ -83,7 +83,7 @@ export function ApiKeyCard({ secret }: { secret: string | null }) {
               </ul>
             </div>
           </TabsContent>
-          <TabsContent value='verify' className='space-y-4'>
+          <TabsContent tabIndex={-1} value='verify' className='space-y-4'>
             <div className='space-y-2'>
               <h4 className='font-medium'>Verify an Order</h4>
               <p className='text-sm text-muted-foreground'>
@@ -97,7 +97,7 @@ export function ApiKeyCard({ secret }: { secret: string | null }) {
             <div className='space-y-2'>
               <h4 className='font-medium'>Example with JavaScript</h4>
               <CodeBlock
-                code={`fetch('https://api.llamout.com/api/v1/verify?orderHash=ABC123', {
+                code={`fetch('https://api.llamout.com/api/v1/verify?orderHash=abc123...', {
   headers: {
     'll-api-key': '${showApiKey ? secret.substring(0, 10) + '...' : '******'}',
     'Content-Type': 'application/json'
@@ -106,8 +106,8 @@ export function ApiKeyCard({ secret }: { secret: string | null }) {
 .then(response => response.json())
 .then(data => {
   if (data.success) {
-    console.log('Estado de pago:', data.data.paid ? 'Pagado' : 'Pendiente');
-    console.log('Detalles de la orden:', data.data);
+    console.log('Payment status:', data.data.paid ? 'Paid' : 'Pending');
+    console.log('Order details:', data.data);
   } else {
     console.error('Error:', data.error);
   }
