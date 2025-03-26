@@ -97,7 +97,7 @@ export function ApiKeyCard({ secret }: { secret: string | null }) {
             <div className='space-y-2'>
               <h4 className='font-medium'>Example with JavaScript</h4>
               <CodeBlock
-                code={`fetch('https://api.llamout.com/api/v1/verify?orderHash=abc123...', {
+                code={`fetch('https://llamout.com/api/v1/verify?orderHash=abc123...', {
   headers: {
     'll-api-key': '${showApiKey ? secret.substring(0, 10) + '...' : '******'}',
     'Content-Type': 'application/json'
@@ -120,7 +120,7 @@ export function ApiKeyCard({ secret }: { secret: string | null }) {
               <h4 className='font-medium'>Example with cURL</h4>
               <CodeBlock
                 code={`curl -X GET \\
-  "https://api.llamout.com/api/v1/verify?orderHash=abc123..." \\
+  "https://llamout.com/api/v1/verify?orderHash=abc123..." \\
   -H "ll-api-key: ${showApiKey ? secret.substring(0, 10) + '...' : '******'}" \\
   -H "Content-Type: application/json"`}
               />
