@@ -91,7 +91,7 @@ export function ApiKeyCard({ secret }: { secret: string | null }) {
                 <code className='text-foreground'>/api/v1/verify</code> with the parameter{' '}
                 <code className='text-foreground'>orderHash</code>:
               </p>
-              <CodeBlock code={`GET /api/v1/verify?orderHash=ABC123`} />
+              <CodeBlock code={`GET /api/v1/verify?orderHash=abc123...`} />
             </div>
 
             <div className='space-y-2'>
@@ -120,7 +120,7 @@ export function ApiKeyCard({ secret }: { secret: string | null }) {
               <h4 className='font-medium'>Example with cURL</h4>
               <CodeBlock
                 code={`curl -X GET \\
-  "https://api.llamout.com/api/v1/verify?orderHash=abc123xyz456" \\
+  "https://api.llamout.com/api/v1/verify?orderHash=abc123..." \\
   -H "ll-api-key: ${showApiKey ? secret.substring(0, 10) + '...' : '******'}" \\
   -H "Content-Type: application/json"`}
               />
