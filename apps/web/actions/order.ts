@@ -67,6 +67,29 @@ export async function modifyOrder(id: any): Promise<{ error: string | null }> {
   return { error: null };
 }
 
+export async function getOrder(hash: string) {
+  if (!hash) return { error: 'Order required' };
+
+  const query = {
+    order: {
+      $: {
+        where: {
+          hash,
+          paid: true,
+        },
+      },
+    },
+  };
+
+  try {
+    const { order } = await db.query(query);
+
+    return { error: null, data: order[0] };
+  } catch (error: any) {
+    return { error: error?.body?.message, data: null };
+  }
+}
+
 export async function getPaidOrders(store_id: string) {
   if (!store_id) return { error: 'Store required' };
 
