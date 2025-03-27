@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { LoaderCircle } from 'lucide-react';
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
 import { useToast } from '@workspace/ui/hooks/use-toast';
 import { Input } from '@workspace/ui/components/input';
@@ -10,6 +11,9 @@ import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '@works
 
 import { validateWaitlist } from '@/actions/waitlist';
 import { db } from '@/lib/database';
+
+const GOOGLE_CLIENT_NAME = process.env.GOOGLE_CLIENT_NAME || '';
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_ID || '';
 
 export function LoginForm() {
   // Hooks
@@ -20,6 +24,7 @@ export function LoginForm() {
   const [code, setCode] = useState('');
   const [email, setEmail] = useState<string>('');
   const [loading, setLoading] = useState(false);
+  const [nonce] = useState(crypto.randomUUID());
 
   const handleSendCode = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -73,13 +78,33 @@ export function LoginForm() {
 
   return (
     <div className='flex flex-col items-center gap-6'>
+      <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+        <GoogleLogin
+          theme='filled_black'
+          size='large'
+          shape='square'
+          ux_mode='popup'
+          nonce={nonce}
+          onError={() => alert('Login failed')}
+          onSuccess={({ credential }) => {
+            db.auth
+              .signInWithIdToken({
+                clientName: GOOGLE_CLIENT_NAME,
+                idToken: credential as string,
+                nonce,
+              })
+              .catch((err) => {
+                alert('Uh oh: ' + err.body?.message);
+              });
+          }}
+        />
+      </GoogleOAuthProvider>
       {!sentEmail ? (
         <>
           <form className='flex flex-col gap-4' onSubmit={handleSendCode}>
             <div className='flex flex-col gap-4'>
               <p className='text-sm text-muted-foreground'>Enter your email, and we’ll send you a verification code.</p>
               <div className='grid gap-2'>
-                {/* <Label htmlFor='email'>Email</Label> */}
                 <Input
                   id='email'
                   type='email'
@@ -103,15 +128,11 @@ export function LoginForm() {
               code you see.
             </p>
             <div className='flex flex-col gap-2'>
-              {/* <Label htmlFor='code'>Code</Label> */}
               <InputOTP id='code' maxLength={6} value={code} onChange={(value) => setCode(value)}>
                 <InputOTPGroup>
                   <InputOTPSlot index={0} />
                   <InputOTPSlot index={1} />
                   <InputOTPSlot index={2} />
-                  {/* </InputOTPGroup>
-                <InputOTPSeparator />
-                <InputOTPGroup> */}
                   <InputOTPSlot index={3} />
                   <InputOTPSlot index={4} />
                   <InputOTPSlot index={5} />
