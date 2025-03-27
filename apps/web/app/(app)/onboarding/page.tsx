@@ -103,6 +103,9 @@ export default function Page() {
               </p> */}
             </div>
             <LoginForm />
+            <Button variant='link' asChild>
+              <Link href='/'>Go to Home</Link>
+            </Button>
           </div>
         </div>
       </>
