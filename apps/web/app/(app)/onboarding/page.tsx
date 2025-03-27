@@ -43,7 +43,7 @@ export default function Page() {
   const { data: dataStore, isLoading: isLoadingStore } = db.useQuery(queryStore);
   const hasStore = dataStore?.store[0];
 
-  if (user && hasStore?.id) {
+  if (!isLoadingStore && !isLoading && user && hasStore?.id) {
     router.push(`/dashboard/${hasStore?.id}`);
     return null;
   }
