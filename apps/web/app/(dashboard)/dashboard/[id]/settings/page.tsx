@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { AlertCircle, Check, LoaderCircle, SquareArrowOutUpRight } from 'lucide-react';
 
 import {
@@ -31,7 +31,8 @@ import { getLnurlp } from '@/actions/payment';
 import { db } from '@/lib/database';
 
 export default function Page() {
-  // Params
+  // Libs
+  const router = useRouter();
   const params = useParams<{ id: string }>();
 
   // Hooks
@@ -68,6 +69,11 @@ export default function Page() {
   const [lnaddress, setLnaddress] = useState(store?.lnaddress || '');
   const [validLn, setValidLn] = useState(store?.lnaddress ? true : false);
   const [uploadingImage, setUploadingImage] = useState(false);
+
+  if (!isLoading && !user) {
+    router.push(`/auth`);
+    return null;
+  }
 
   if (!store) return null;
 
@@ -236,7 +242,7 @@ export default function Page() {
         <ApiKeyCard secret={store?.api_key} />
 
         {/* Delete store */}
-        <Card className='border-destructive/50'>
+        {/* <Card className='border-destructive/50'>
           <CardHeader>
             <CardTitle className='text-destructive'>Delete Store</CardTitle>
             <CardDescription>
@@ -277,7 +283,7 @@ export default function Page() {
               </AlertDialogContent>
             </AlertDialog>
           </CardFooter>
-        </Card>
+        </Card> */}
       </div>
     </>
   );
