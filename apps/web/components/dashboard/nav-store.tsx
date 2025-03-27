@@ -1,6 +1,7 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
 import { House, LogOut, SettingsIcon } from 'lucide-react';
 
 import {
@@ -16,9 +17,9 @@ import { Skeleton } from '@workspace/ui/components/skeleton';
 import { Button } from '@workspace/ui/components/button';
 
 import { db } from '@/lib/database';
-import Link from 'next/link';
 
 export function NavStore() {
+  const router = useRouter();
   const params = useParams<{ id: string }>();
 
   const { user } = db.useAuth();
@@ -96,6 +97,7 @@ export function NavStore() {
         <DropdownMenuItem
           onClick={() => {
             db.auth.signOut();
+            router.push('/auth');
           }}
         >
           <LogOut />
