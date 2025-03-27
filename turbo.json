@@ -11,7 +11,8 @@
         "NEXT_PUBLIC_GOOGLE_ANALYTICS",
         "INSTANTDB_APP_ID",
         "INSTANTDB_ADMIN_ID",
-        "USEPLUNK_BEARER_TOKEN"
+        "USEPLUNK_BEARER_TOKEN",
+        "GOOGLE_CLIENT_ID"
       ],
       "dependsOn": [
         "^build"
@@ -43,7 +44,8 @@
       "env": [
         "NEXT_PUBLIC_APP_URL",
         "NEXT_PUBLIC_GOOGLE_ANALYTICS",
-        "INSTANTDB_APP_ID"
+        "INSTANTDB_APP_ID",
+        "GOOGLE_CLIENT_ID"
       ]
     }
   }
