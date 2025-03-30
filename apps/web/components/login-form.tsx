@@ -99,7 +99,7 @@ export function LoginForm() {
           }}
         />
       </GoogleOAuthProvider>
-      {!sentEmail ? (
+      {/* {!sentEmail ? (
         <>
           <form className='flex flex-col gap-4' onSubmit={handleSendCode}>
             <div className='flex flex-col gap-4'>
@@ -144,7 +144,7 @@ export function LoginForm() {
             </Button>
           </div>
         </form>
-      )}
+      )} */}
     </div>
   );
 }
