@@ -78,28 +78,7 @@ export function LoginForm() {
 
   return (
     <div className='flex flex-col items-center gap-6'>
-      <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-        <GoogleLogin
-          theme='filled_black'
-          size='large'
-          shape='square'
-          ux_mode='popup'
-          nonce={nonce}
-          onError={() => alert('Login failed')}
-          onSuccess={({ credential }) => {
-            db.auth
-              .signInWithIdToken({
-                clientName: GOOGLE_CLIENT_NAME,
-                idToken: credential as string,
-                nonce,
-              })
-              .catch((err) => {
-                alert('Uh oh: ' + err.body?.message);
-              });
-          }}
-        />
-      </GoogleOAuthProvider>
-      {/* {!sentEmail ? (
+      {!sentEmail ? (
         <>
           <form className='flex flex-col gap-4' onSubmit={handleSendCode}>
             <div className='flex flex-col gap-4'>
@@ -144,7 +123,28 @@ export function LoginForm() {
             </Button>
           </div>
         </form>
-      )} */}
+      )}
+      {/* <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+        <GoogleLogin
+          theme='filled_black'
+          size='large'
+          shape='square'
+          ux_mode='popup'
+          nonce={nonce}
+          onError={() => alert('Login failed')}
+          onSuccess={({ credential }) => {
+            db.auth
+              .signInWithIdToken({
+                clientName: GOOGLE_CLIENT_NAME,
+                idToken: credential as string,
+                nonce,
+              })
+              .catch((err) => {
+                alert('Uh oh: ' + err.body?.message);
+              });
+          }}
+        />
+      </GoogleOAuthProvider> */}
     </div>
   );
 }
