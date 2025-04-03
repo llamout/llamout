@@ -65,8 +65,12 @@ export function CheckoutProvider({
                   <h1 className='font-semibold tracking-tighter text-balance'>{product?.name}</h1>
                   {product?.price.length > 0 &&
                     product?.price?.map((variant: any, index: any) => (
-                      <div className='flex items-center' key={index}>
-                        <Satoshi className='size-4' />
+                      <div className='flex items-center gap-1' key={index}>
+                        {variant?.currency === 'SAT' ? (
+                          <Satoshi className='size-4' />
+                        ) : (
+                          <span className='text-sm'>$</span>
+                        )}
                         <p className='text-lg tracking-tighter text-balance'>
                           <span className='font-semibold'>{formatBigNumbers(Number(variant?.price) * quantity)}</span>
                           <span className='ml-1 text-muted-foreground'>{variant?.currency}</span>
