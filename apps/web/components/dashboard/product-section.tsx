@@ -55,9 +55,9 @@ export function ProductSection({ store_id }: { store_id: string }) {
       <div className='flex items-center justify-between w-full'>
         <div className='flex justify-between items-center gap-1 w-full'>
           <h1 className='text-lg font-semibold'>Products</h1>
-          {products && products?.length > 0 && (
+          {/* {products && products?.length > 0 && (
             <AddProductModal store={store_id} product={product} onChange={setProduct} />
-          )}
+          )} */}
         </div>
       </div>
 
