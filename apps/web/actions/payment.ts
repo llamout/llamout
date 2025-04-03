@@ -39,17 +39,29 @@ export async function generateInvoice(callback: string, amountInSats: number, co
 interface GeneratePayment {
   lightningAddress: string;
   amount: number;
+  currency: string;
 }
 
 export async function generatePayment(props: GeneratePayment) {
-  const { lightningAddress, amount } = props;
+  const { lightningAddress, amount, currency } = props;
+
+  let value;
 
   try {
+    if (currency !== 'SAT') {
+      const YADIO_API_URL = `https://api.yadio.io/rate/${currency}/BTC`;
+      const response = await fetch(YADIO_API_URL);
+      const data = await response.json();
+      const rate = (data?.rate).toFixed(0);
+
+      value = ((amount * 100000000) / rate).toFixed(0);
+    }
+
     // Get LNURLP
     const lnurlp = await getLnurlp(lightningAddress);
 
     // Generate invoice
-    const invoice = await generateInvoice(lnurlp.callback, amount);
+    const invoice = await generateInvoice(lnurlp.callback, (currency === 'SAT' ? amount : value) as number);
 
     return { invoice, callback: lnurlp.callback };
   } catch (error) {

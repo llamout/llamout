@@ -13,7 +13,7 @@ export async function addProduct(props: {
   image: string;
   name: string;
   description: string;
-  prices: { price: number; currency: string; interval: IntervalTypes | null; type: TypeTypes }[];
+  prices: { price: number | null; currency: string };
   success_url?: string;
 }): Promise<{ error: any; data: any }> {
   const { store_id, image, name, description, prices, success_url } = props;
@@ -46,15 +46,14 @@ export async function addProduct(props: {
       }),
     );
 
-    for (let index = 0; index < prices.length; index++) {
-      await addPrice({
-        store_id,
-        product_id: newId,
-        price: Number(prices[index]?.price),
-        interval: prices[index]?.interval ?? null,
-        type: prices[index]?.type,
-      });
-    }
+    await addPrice({
+      store_id,
+      product_id: newId,
+      price: Number(prices?.price),
+      currency: prices?.currency,
+      interval: null,
+      type: null,
+    });
 
     return { error: null, data: newId };
   } catch (error) {
