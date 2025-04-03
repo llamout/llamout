@@ -356,6 +356,7 @@ export function CustomAccordion(props: CustomAccordion) {
                   customer_id: id,
                   // Data
                   amount: Number(product?.price[0]?.price),
+                  currency: product?.price[0]?.currency,
                   quantity,
                 });
 
@@ -367,6 +368,7 @@ export function CustomAccordion(props: CustomAccordion) {
                 const data = await generatePayment({
                   lightningAddress: store?.lnaddress,
                   amount: price,
+                  currency: product?.price[0]?.currency,
                 });
 
                 setInvoice(data?.invoice?.pr);
