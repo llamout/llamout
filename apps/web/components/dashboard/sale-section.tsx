@@ -60,7 +60,11 @@ export function SaleSection({ data }: { data: { id: string; amount: number; crea
                       </TableCell>
                       <TableCell className='text-end'>
                         <div className='flex items-center justify-end gap-1'>
-                          <Satoshi className='size-4' />
+                          {sale?.currency === 'SAT' ? (
+                            <Satoshi className='w-4 h-4' />
+                          ) : (
+                            <span className='text-sm'>$</span>
+                          )}
                           <div className='text-md font-semibold'>{formatBigNumbers(sale?.amount)}</div>
                         </div>
                       </TableCell>
