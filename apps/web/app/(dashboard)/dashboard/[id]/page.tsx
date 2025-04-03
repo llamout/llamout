@@ -1,22 +1,14 @@
 'use client';
 
-import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { BadgeDollarSign, Contact, LoaderCircle, ReceiptText } from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@workspace/ui/components/card';
-import { Satoshi } from '@workspace/ui/components/icons/satoshi';
-import { Button } from '@workspace/ui/components/button';
-import { Progress } from '@workspace/ui/components/progress';
-
-import { formatBigNumbers } from '@/lib/number';
 import { db } from '@/lib/database';
 
 import { ProductSection } from '@/components/dashboard/product-section';
 import { CustomerSection } from '@/components/dashboard/customer-section';
 import { SaleSection } from '@/components/dashboard/sale-section';
-
-import { CHECKOUT_PRODUCT_HASH, LIMIT_SALES_FREE } from '@/config/system';
 
 export default function Page() {
   const params = useParams<{ id: string }>();
@@ -113,11 +105,11 @@ export default function Page() {
   const countOrders = order?.length;
   const countSales = orderPaids?.length > 0 ? (orderPaids?.length * 100) / order?.length : 0;
 
-  const hastLimit = !store?.has_suscription && totalRevenue >= 1000000;
+  // const hastLimit = !store?.has_suscription && totalRevenue >= 1000000;
 
   return (
     <>
-      <div
+      {/* <div
         className={`relative overflow-hidden flex gap-4 w-full p-8 bg-foreground text-background rounded-lg ${hastLimit ? 'flex-col items-center' : 'flex-col md:flex-row'}`}
       >
         <div
@@ -157,7 +149,7 @@ export default function Page() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div className='grid gap-4 md:grid-cols-3'>
         <Card>
