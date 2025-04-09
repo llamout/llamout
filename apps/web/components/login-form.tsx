@@ -34,18 +34,18 @@ export function LoginForm() {
 
     // TO-DO
     // Remove validation
-    const isListed = await validateWaitlist({ email });
+    // const isListed = await validateWaitlist({ email });
 
-    if (isListed?.error) {
-      setLoading(false);
-      toast({
-        variant: 'destructive',
-        title: 'Uh oh!',
-        description: 'It looks like you are not on the waiting list.',
-      });
+    // if (isListed?.error) {
+    //   setLoading(false);
+    //   toast({
+    //     variant: 'destructive',
+    //     title: 'Uh oh!',
+    //     description: 'It looks like you are not on the waiting list.',
+    //   });
 
-      return;
-    }
+    //   return;
+    // }
 
     db.auth.sendMagicCode({ email }).catch((err) => {
       setSentEmail('');
