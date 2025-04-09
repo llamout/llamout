@@ -24,15 +24,17 @@ export function AddProductModal({ store, product, onChange, ...props }: any) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          {...props}
-          id='cta-dashboard-products-add'
-          className='w-full sm:w-auto'
-          size='lg'
-          onClick={() => setOpen(true)}
-        >
-          Add Product
-        </Button>
+        <div>
+          <Button
+            {...props}
+            id='cta-dashboard-products-add'
+            className='w-full sm:w-auto'
+            size='lg'
+            onClick={() => setOpen(true)}
+          >
+            Add Product
+          </Button>
+        </div>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
