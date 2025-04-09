@@ -9,6 +9,7 @@ import { Button } from '@workspace/ui/components/button';
 import { db } from '@/lib/database';
 
 import { LoginForm } from '@/components/login-form';
+import { Logo } from '@/components/logo';
 
 export default function Page() {
   const router = useRouter();
@@ -78,18 +79,17 @@ export default function Page() {
       <div className='flex min-h-svh items-center justify-center bg-white'>
         <div className='flex flex-col gap-6 w-full max-w-sm px-4'>
           <div className='flex flex-col items-center gap-2 text-center'>
-            <div className='flex justify-center items-center w-12 h-12 bg-gradient-to-t from-background to-transparent border rounded-lg shadow-sm text-muted-foreground'>
-              <ScanFace className='size-6' />
-            </div>
+            <Link href='/'>
+              <div className='flex justify-center items-center w-12 h-12 bg-gradient-to-t from-background to-transparent border rounded-lg shadow-sm text-muted-foreground'>
+                <Logo />
+              </div>
+            </Link>
             <h1 className='text-xl font-bold'>Let's log you in</h1>
             {/* <p className='text-muted-foreground'>
                 We are about to create your admin account, please use your personal email.
               </p> */}
           </div>
           <LoginForm />
-          <Button variant='link' asChild>
-            <Link href='/'>Go to Home</Link>
-          </Button>
         </div>
       </div>
     </>
