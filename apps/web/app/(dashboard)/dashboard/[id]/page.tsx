@@ -181,7 +181,7 @@ export default function Page() {
         </Card>
       </div>
       <ProductSection store_id={store?.id || ''} />
-      <CustomerSection data={customer} />
+      <CustomerSection data={customer} orders={order?.filter((order) => order?.paid === true)} />
       <SaleSection data={order?.filter((order) => order.paid === true)} />
       {/* <div className='min-h-[100vh] flex-1 rounded-xl bg-white/50 md:min-h-min' /> */}
     </>
