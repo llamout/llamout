@@ -1,56 +1,16 @@
 import { ContactRound } from 'lucide-react';
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@workspace/ui/components/table';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@workspace/ui/components/table';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@workspace/ui/components/tooltip';
 import { Card } from '@workspace/ui/components/card';
 
-const CUSTOMERS: any = [
-  // {
-  //   id: 1,
-  //   name: 'Jeremias',
-  //   pubkey: '',
-  //   email: 'jereflores@hotmail.es',
-  //   created_at: 1738614061415,
-  // },
-  // {
-  //   id: 2,
-  //   name: '',
-  //   pubkey: 'tincho@hodl.ar',
-  //   email: '',
-  //   created_at: 1738689769584,
-  // },
-  // {
-  //   id: 3,
-  //   name: '',
-  //   pubkey: 'npub18ggwqfvqmxt3m6f4ek2q55nghlj9380me364wd67wz8yzpyh8wusevpdmh',
-  //   email: '',
-  //   created_at: 1738199211938,
-  // },
-];
-
-function formatDate(timestamp: any) {
-  const date = new Date(timestamp);
-
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-  const month = months[date.getMonth()];
-  const day = date.getDate();
-  const year = date.getFullYear();
-
-  return `${month} ${day}, ${year}`;
-}
+import { timeAgo } from '@/lib/date';
 
 export function CustomerSection({
   data,
+  orders,
 }: {
   data: { id: string; name: string; email: string; pubkey: string; store: string; created_at: number }[] | any;
+  orders: any[];
 }) {
   return (
     <div className='flex flex-col gap-4'>
@@ -81,10 +41,11 @@ export function CustomerSection({
               )} */}
               <TableHeader className='px-4'>
                 <TableRow className=''>
-                  <TableHead className='max-w-[100px]'>Pubkey</TableHead>
-                  <TableHead className='max-w-[100px]'>Email</TableHead>
-                  <TableHead className='whitespace-nowrap'>Name</TableHead>
-                  <TableHead className='hidden sm:table-cell whitespace-nowrap'>Created at</TableHead>
+                  <TableHead className='w-3'></TableHead>
+                  {/* <TableHead className='max-w-[100px]'>Pubkey</TableHead> */}
+                  <TableHead className='overflow-hidden max-w-[200px]'>Customer</TableHead>
+                  {/* <TableHead className='whitespace-nowrap'>Name</TableHead> */}
+                  <TableHead className='hidden sm:table-cell w-20 whitespace-nowrap'>Ago</TableHead>
                   {/* <TableHead className='w-[60px]'></TableHead> */}
                 </TableRow>
               </TableHeader>
@@ -92,7 +53,7 @@ export function CustomerSection({
                 {data?.length > 0 &&
                   data?.map((customer: any) => (
                     <TableRow key={customer?.id}>
-                      <TableCell className='overflow-hidden max-w-[100px] text-ellipsis'>
+                      {/* <TableCell className='overflow-hidden max-w-[100px] text-ellipsis'>
                         {customer?.pubkey ? (
                           <TooltipProvider>
                             <Tooltip>
@@ -107,24 +68,27 @@ export function CustomerSection({
                         ) : (
                           '-'
                         )}
+                      </TableCell> */}
+                      <TableCell>
+                        <div
+                          className={`w-3 h-3 rounded-full ${orders && orders?.length > 0 && orders?.find((order: any) => order?.customer_id === customer?.id) ? 'bg-green-600' : 'bg-gray-200'}`}
+                        ></div>
                       </TableCell>
-                      <TableCell className='overflow-hidden max-w-[100px] text-ellipsis'>
-                        {customer?.email ? (
-                          <TooltipProvider>
-                            <Tooltip>
-                              <TooltipTrigger>{customer?.email}</TooltipTrigger>
-                              <TooltipContent side='top' align='start'>
-                                <p>{customer?.email}</p>
-                              </TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
-                        ) : (
-                          '-'
-                        )}
+                      <TableCell>
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger className='overflow-hidden max-w-[200px] text-ellipsis'>
+                              {customer?.pubkey || customer?.email}
+                            </TooltipTrigger>
+                            <TooltipContent side='top' align='start'>
+                              <p>{customer?.pubkey || customer?.email}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
                       </TableCell>
-                      <TableCell>{customer?.name || '-'}</TableCell>
+                      {/* <TableCell>{customer?.name || '-'}</TableCell> */}
                       <TableCell className='hidden sm:table-cell whitespace-nowrap'>
-                        {formatDate(customer?.created_at)}
+                        {timeAgo(customer?.created_at)}
                       </TableCell>
                       {/* <TableCell>
                       <Button variant='outline' size='icon'>
