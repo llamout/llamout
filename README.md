@@ -51,6 +51,11 @@ cp .env.example .env
 pnpm run dev
 ```
 
+5. Push db
+``` bash
+npx instant-cli@latest push schema
+```
+
 ## 🤝 Contribute
 
 We'd love to hear from you to improve **Llamout**! Follow these steps to contribute:

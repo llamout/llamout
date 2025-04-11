@@ -25,11 +25,10 @@ export function NavStore() {
   const { user } = db.useAuth();
 
   const query = {
-    store: {
+    stores: {
       $: {
         where: {
           id: params?.id,
-          user_id: user?.id || '',
         },
       },
     },
@@ -37,11 +36,11 @@ export function NavStore() {
 
   const { data } = db.useQuery(query);
 
-  if (!user || data?.store?.length === 0) {
+  if (!user || data?.stores?.length === 0) {
     return <Skeleton className='w-8 h-8 bg-gray-200 rounded-full' />;
   }
 
-  const store = data?.store[0];
+  const store = data?.stores[0];
 
   return (
     <DropdownMenu>

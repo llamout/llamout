@@ -10,7 +10,7 @@ export async function addCustomer(props: {
   pubkey: string;
   store_id: string;
 }): Promise<string> {
-  const { name = null, email = null, pubkey = null, store_id } = props;
+  const { name = '', email = '', pubkey = '', store_id } = props;
 
   // TO-DO
   if (!store_id) {
@@ -26,7 +26,7 @@ export async function addCustomer(props: {
 
   // Find if customer exist
   const query = {
-    customer: {
+    customers: {
       $: {
         where: {
           email: email || '',
@@ -36,9 +36,9 @@ export async function addCustomer(props: {
     },
   };
 
-  const { customer } = await db.query(query);
+  const { customers } = await db.query(query);
 
-  if (customer && customer.length > 0) {
+  if (customers && customers.length > 0) {
     // @ts-ignore
     return customer[0]?.id;
   }
@@ -48,17 +48,17 @@ export async function addCustomer(props: {
 
   await db.transact(
     // @ts-ignore
-    db.tx.customer[newId].update({
-      store_id,
+    db.tx.customers[newId]
+      .update({
+        // Data
+        name,
+        email,
+        pubkey,
 
-      // Data
-      name,
-      email,
-      pubkey,
-
-      // Status
-      created_at: Date.now(),
-    }),
+        // Status
+        created_at: Date.now(),
+      })
+      .link({ store: store_id }),
   );
 
   return newId;

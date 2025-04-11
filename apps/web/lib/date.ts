@@ -1,32 +1,14 @@
-export function timeAgo(timestamp: number): string {
+export function timeAgo(timestamp: number) {
   const now = Date.now();
-  const secondsAgo = Math.floor((now - timestamp * 1000) / 1000);
+  const diffMs = now - timestamp;
+  const diffSec = Math.floor(diffMs / 1000);
 
-  const minutes = Math.floor(secondsAgo / 60);
-  const hours = Math.floor(minutes / 60);
-  const days = Math.floor(hours / 24);
+  if (diffSec < 60) return 'Now';
+  if (diffSec < 3600) return `${Math.floor(diffSec / 60)} min`;
+  if (diffSec < 86400) return `${Math.floor(diffSec / 3600)} hour${Math.floor(diffSec / 3600) > 1 ? 's' : ''}`;
 
-  if (secondsAgo < 60) {
-    return 'now';
-  } else if (minutes < 60) {
-    return `${minutes}m`;
-  } else if (hours < 24) {
-    return `${hours}h`;
-  } else if (days < 7) {
-    return `${days}d`;
-  } else {
-    const date = new Date(timestamp * 1000);
-    const day = date.getDate();
-    const month = date.toLocaleString('en-US', { month: 'short' });
-    const year = date.getFullYear();
-    const currentYear = new Date().getFullYear();
-
-    if (year === currentYear) {
-      return `${day} ${month}`;
-    } else {
-      return `${day} ${month} ${year}`;
-    }
-  }
+  const days = Math.floor(diffSec / 86400);
+  return `${days} day${days > 1 ? 's' : ''}`;
 }
 
 export function formatDate(timestamp: any) {

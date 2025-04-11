@@ -28,23 +28,24 @@ export async function addOrder(props: AddOrder): Promise<string> {
 
   await db.transact(
     // @ts-ignore
-    db.tx.order[newId].update({
-      store_id,
-      product_id,
-      price_id,
-      customer_id,
+    db.tx.orders[newId]
+      .update({
+        // Data
+        amount: amount ?? null,
+        quantity: quantity ?? null,
+        currency,
+        paid: false,
+        hash,
 
-      // Data
-      amount: amount ?? null,
-      quantity: quantity ?? null,
-      currency,
-      paid: false,
-      hash,
-
-      // Status
-      created_at: Date.now(),
-      updated_at: Date.now(),
-    }),
+        // Status
+        created_at: Date.now(),
+        updated_at: Date.now(),
+      })
+      .link({
+        store: store_id,
+        customer: customer_id,
+        product: product_id,
+      }),
   );
 
   return newId;
@@ -55,7 +56,7 @@ export async function modifyOrder(id: any): Promise<{ error: string | null }> {
 
   await db.transact(
     // @ts-ignore
-    db.tx.order[id].update({
+    db.tx.orders[id].update({
       // Data
       paid: true,
 
@@ -67,25 +68,25 @@ export async function modifyOrder(id: any): Promise<{ error: string | null }> {
   return { error: null };
 }
 
-export async function getPaidOrders(store_id: string) {
-  if (!store_id) return { error: 'Store required' };
+// export async function getPaidOrders(store_id: string) {
+//   if (!store_id) return { error: 'Store required' };
 
-  const query = {
-    order: {
-      $: {
-        where: {
-          store_id,
-          paid: true,
-        },
-      },
-    },
-  };
+//   const query = {
+//     order: {
+//       $: {
+//         where: {
+//           store_id,
+//           paid: true,
+//         },
+//       },
+//     },
+//   };
 
-  try {
-    const { order } = await db.query(query);
+//   try {
+//     const { order } = await db.query(query);
 
-    return { error: null, data: order };
-  } catch (error) {
-    return { error, data: null };
-  }
-}
+//     return { error: null, data: order };
+//   } catch (error) {
+//     return { error, data: null };
+//   }
+// }

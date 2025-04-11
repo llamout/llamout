@@ -6,7 +6,7 @@ import { Satoshi } from '@workspace/ui/components/icons/satoshi';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@workspace/ui/components/tooltip';
 
 import { formatBigNumbers } from '@/lib/number';
-import { formatDate } from '@/lib/date';
+import { timeAgo } from '@/lib/date';
 
 export function SaleSection({ data }: { data: { id: string; amount: number; created_at: number }[] | any }) {
   return (
@@ -34,7 +34,7 @@ export function SaleSection({ data }: { data: { id: string; amount: number; crea
               <TableHeader className='px-4'>
                 <TableRow className=''>
                   <TableHead className='w-full'>Identifier</TableHead>
-                  <TableHead className='hidden sm:table-cell w-auto whitespace-nowrap'>Date</TableHead>
+                  <TableHead className='hidden sm:table-cell w-auto whitespace-nowrap'>Ago</TableHead>
                   <TableHead className='text-end'>Amount</TableHead>
                 </TableRow>
               </TableHeader>
@@ -56,7 +56,7 @@ export function SaleSection({ data }: { data: { id: string; amount: number; crea
                       </TableCell>
                       {/* <TableCell>AlignUI・Code Library</TableCell> */}
                       <TableCell className='hidden sm:table-cell w-auto whitespace-nowrap'>
-                        {formatDate(sale?.created_at)}
+                        {timeAgo(sale?.created_at)}
                       </TableCell>
                       <TableCell className='text-end'>
                         <div className='flex items-center justify-end gap-1'>
@@ -66,6 +66,9 @@ export function SaleSection({ data }: { data: { id: string; amount: number; crea
                             <span className='text-sm'>$</span>
                           )}
                           <div className='text-md font-semibold'>{formatBigNumbers(sale?.amount)}</div>
+                          <span className='text-sm text-muted-foreground'>
+                            {sale?.currency === 'SAT' ? 'SAT' : sale?.currency}
+                          </span>
                         </div>
                       </TableCell>
                     </TableRow>

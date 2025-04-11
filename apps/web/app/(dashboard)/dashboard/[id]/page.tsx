@@ -14,49 +14,33 @@ export default function Page() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
 
-  const { user, isLoading } = db.useAuth();
-
   // Get Store
   const queryStore = {
-    store: {
+    stores: {
       $: {
         where: {
           id: params?.id || '',
-          user_id: user?.id || '',
         },
       },
+      customers: {
+        orders: {},
+      },
+      orders: {},
     },
   };
 
-  const { data: dataStore, isLoading: isLoadingStore } = db.useQuery(queryStore);
-  const store = dataStore?.store[0];
+  const { data, isLoading } = db.useQuery(queryStore);
 
-  // Get data for dashboard
-  const queryDashboard = {
-    customer: {
-      $: {
-        where: {
-          store_id: store?.id || '',
-        },
-      },
-    },
-    order: {
-      $: {
-        where: {
-          store_id: store?.id || '',
-        },
-      },
-    },
-  };
+  const store = data?.stores[0];
+  const customers = store?.customers;
+  const orders = store?.orders;
 
-  const { data: dataDashboard } = db.useQuery(queryDashboard);
+  // if (!isLoading && !user) {
+  //   router.push(`/auth`);
+  //   return null;
+  // }
 
-  if (!isLoading && !user) {
-    router.push(`/auth`);
-    return null;
-  }
-
-  if (!isLoadingStore && !store) {
+  if (!isLoading && !store) {
     router.push(`/onboarding`);
     return null;
   }
@@ -72,38 +56,36 @@ export default function Page() {
     );
   }
 
-  if (!dataDashboard) {
-    return (
-      <div className='flex min-h-svh items-center justify-center bg-background'>
-        <div className='flex flex-col items-center gap-4 max-w-sm text-center'>
-          <LoaderCircle className='size-8 animate-spin' />
-          <h2 className='text-lg font-bold'>Loading Dashboard</h2>
-        </div>
-      </div>
-    );
-  }
+  // if (!dataDashboard) {
+  //   return (
+  //     <div className='flex min-h-svh items-center justify-center bg-background'>
+  //       <div className='flex flex-col items-center gap-4 max-w-sm text-center'>
+  //         <LoaderCircle className='size-8 animate-spin' />
+  //         <h2 className='text-lg font-bold'>Loading Dashboard</h2>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   // if (error || !data) {
   //   return <>Oops, {error}</>;
   // }
 
-  const { order, customer } = dataDashboard;
+  // function calculateTotalRevenue(orders: any[]) {
+  //   let total = 0;
 
-  function calculateTotalRevenue(orders: any[]) {
-    let total = 0;
+  //   for (let i = 0; i < orders.length; i++) {
+  //     total += orders[i]?.amount;
+  //   }
 
-    for (let i = 0; i < orders.length; i++) {
-      total += orders[i]?.amount;
-    }
+  //   return total;
+  // }
 
-    return total;
-  }
-
-  const orderPaids = order?.filter((order) => order.paid === true) || 0;
-  const totalRevenue = calculateTotalRevenue(orderPaids);
-  const countCustomers = customer?.length;
-  const countOrders = order?.length;
-  const countSales = orderPaids?.length > 0 ? (orderPaids?.length * 100) / order?.length : 0;
+  const orderPaids = orders?.filter((order) => order?.paid === true) || 0;
+  // const totalRevenue = calculateTotalRevenue(orderPaids);
+  const countCustomers = customers?.length;
+  const countOrders = orders?.length;
+  const countSales = orderPaids && orderPaids?.length > 0 ? (orderPaids?.length * 100) / orders?.length! : 0;
 
   // const hastLimit = !store?.has_suscription && totalRevenue >= 1000000;
 
@@ -181,8 +163,8 @@ export default function Page() {
         </Card>
       </div>
       <ProductSection store_id={store?.id || ''} />
-      <CustomerSection data={customer} />
-      <SaleSection data={order?.filter((order) => order.paid === true)} />
+      <CustomerSection store_id={store?.id || ''} />
+      {/* <SaleSection data={orders?.filter((order) => order.paid === true)} /> */}
       {/* <div className='min-h-[100vh] flex-1 rounded-xl bg-white/50 md:min-h-min' /> */}
     </>
   );

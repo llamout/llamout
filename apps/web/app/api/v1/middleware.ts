@@ -25,7 +25,7 @@ export async function withApiKey(
   try {
     // Buscar la tienda asociada a la API key
     const query = {
-      store: {
+      stores: {
         $: {
           limit: 1,
           where: {
@@ -35,9 +35,9 @@ export async function withApiKey(
       },
     };
 
-    const { store } = await db.query(query);
+    const { stores } = await db.query(query);
 
-    if (!store || store.length === 0) {
+    if (!stores || stores.length === 0) {
       return NextResponse.json<ApiResponse>(
         {
           success: false,
@@ -49,7 +49,7 @@ export async function withApiKey(
     }
 
     // Continuar con el handler, pasando la tienda
-    return handler(request, store[0]);
+    return handler(request, stores[0]);
   } catch (error) {
     console.error('Error al verificar API key:', error);
     return NextResponse.json<ApiResponse>(

@@ -133,23 +133,21 @@ export default function Page() {
                   return;
                 }
 
-                // Create store
-                const idStore = await addStore({
-                  user_id: user?.id,
-                  image: store?.image,
-                  name: store?.name,
-                  website: store?.website,
-                  lnaddress: store?.lnaddress,
-                });
+                try {
+                  // Create store
+                  const idStore = await addStore({
+                    user_id: user?.id,
+                    image: store?.image,
+                    name: store?.name,
+                    website: store?.website,
+                    lnaddress: store?.lnaddress,
+                  });
 
-                // alert(idStore);
-
-                if (!idStore) {
+                  router.push(`/dashboard/${idStore}`);
+                } catch (error) {
+                  console.log('error', error);
                   setLoading(false);
-                  return;
                 }
-
-                router.push(`/dashboard/${idStore}`);
               }}
             >
               {loading ? <LoaderCircle className='size-8 animate-spin' /> : 'Create Store'}

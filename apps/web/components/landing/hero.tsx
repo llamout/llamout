@@ -1,4 +1,5 @@
-import { Form } from './form';
+import Link from 'next/link';
+import { Button } from '@workspace/ui/components/button';
 
 export function Hero() {
   return (
@@ -12,7 +13,9 @@ export function Hero() {
             An open-source payment system designed to allow you to offer your products or services without commission.
           </p>
         </div>
-        <Form />
+        <Link href='/auth'>
+          <Button size='lg'>Start Now</Button>
+        </Link>
       </section>
     </div>
   );

@@ -39,23 +39,22 @@ export async function addPrice(props: {
   try {
     await db.transact(
       // @ts-ignore
-      db.tx.price[newId].update({
-        store_id,
-        product_id,
+      db.tx.prices[newId]
+        .update({
+          // Data
+          name,
+          description,
+          price,
+          currency,
+          interval,
+          type,
 
-        // Data
-        name,
-        description,
-        price,
-        currency,
-        interval,
-        type,
-
-        // Status
-        created_at: Date.now(),
-        updated_at: Date.now(),
-        status: 'active',
-      }),
+          // Status
+          created_at: Date.now(),
+          updated_at: Date.now(),
+          status: 'active',
+        })
+        .link({ product: product_id }),
     );
 
     return { error: null, data: newId };
