@@ -18,38 +18,20 @@ export default function Page() {
 
   // Get Store
   const queryStore = {
-    store: {
-      $: {
-        where: {
-          user_id: user?.id || '',
-        },
-      },
-    },
+    stores: {},
   };
 
-  const { data: dataStore, isLoading: isLoadingStore } = db.useQuery(queryStore);
-  const hasStore = dataStore?.store[0];
+  const { data } = db.useQuery(queryStore);
+  const store = data?.stores[0];
 
-  // TO-DO
-  // if (isLoadingStore) {
-  //   return (
-  //     <div className='flex min-h-svh items-center justify-center bg-background'>
-  //       <div className='flex flex-col items-center gap-4 max-w-sm text-center'>
-  //         <LoaderCircle className='size-8 animate-spin' />
-  //         <h2 className='text-lg font-bold'>Loading Store</h2>
-  //       </div>
-  //     </div>
-  //   );
-  // }
-
-  if (user && hasStore?.id) {
-    router.push(`/dashboard/${hasStore?.id}`);
+  if (user && store?.id) {
+    router.push(`/dashboard/${store?.id}`);
     return;
   }
 
-  if (user && !hasStore) {
-    router.push(`/onboarding`);
-  }
+  // if (user && !hasStore) {
+  //   router.push(`/onboarding`);
+  // }
 
   if (isLoading) {
     return (
@@ -85,9 +67,6 @@ export default function Page() {
               </div>
             </Link>
             <h1 className='text-xl font-bold'>Let's log you in</h1>
-            {/* <p className='text-muted-foreground'>
-                We are about to create your admin account, please use your personal email.
-              </p> */}
           </div>
           <LoginForm />
         </div>

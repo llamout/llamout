@@ -43,18 +43,17 @@ export default function Page() {
 
   // Get Store
   const queryStore = {
-    store: {
+    stores: {
       $: {
         where: {
           id: params?.id || '',
-          user_id: user?.id || '',
         },
       },
     },
   };
 
-  const { data: dataStore } = db.useQuery(queryStore);
-  const store = dataStore?.store[0];
+  const { data } = db.useQuery(queryStore);
+  const store = data?.stores[0];
 
   // Component
   const [settings, setSettings] = useState<{ image: string; name: string; website: string; lnaddress: string }>({
@@ -70,14 +69,16 @@ export default function Page() {
   const [validLn, setValidLn] = useState(store?.lnaddress ? true : false);
   const [uploadingImage, setUploadingImage] = useState(false);
 
-  if (!isLoading && !user) {
-    router.push(`/auth`);
-    return null;
-  }
+  // if (!isLoading && !user) {
+  //   router.push(`/auth`);
+  //   return null;
+  // }
 
   if (!store) return null;
 
-  const handleSubmit = async () => {};
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+  };
 
   return (
     <>
