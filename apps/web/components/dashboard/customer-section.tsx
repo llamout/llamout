@@ -3,15 +3,19 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@workspace/ui/components/tooltip';
 import { Card } from '@workspace/ui/components/card';
 
+import { db } from '@/lib/database';
 import { timeAgo } from '@/lib/date';
 
-export function CustomerSection({
-  data,
-  orders,
-}: {
-  data: { id: string; name: string; email: string; pubkey: string; store: string; created_at: number }[] | any;
-  orders: any[];
-}) {
+export function CustomerSection({ store_id }: { store_id: string }) {
+  const queryStore = {
+    customers: {
+      orders: {},
+    },
+  };
+
+  const { data, isLoading } = db.useQuery(queryStore);
+  const customers = data?.customers;
+
   return (
     <div className='flex flex-col gap-4'>
       <div className='flex items-center justify-between w-full'>
@@ -21,7 +25,7 @@ export function CustomerSection({
         </div>
       </div>
       <div className='flex flex-col gap-2 w-full'>
-        {!data || data?.length === 0 ? (
+        {!customers || customers?.length === 0 ? (
           <div className='flex flex-col items-center justify-center gap-4 w-full py-8 bg-white border border-dashed rounded-lg'>
             <div className='flex flex-col items-center gap-2 text-center'>
               <div className='flex justify-center items-center w-12 h-12 bg-gradient-to-t from-background to-transparent border rounded-lg shadow-sm text-muted-foreground'>
@@ -50,8 +54,8 @@ export function CustomerSection({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {data?.length > 0 &&
-                  data?.map((customer: any) => (
+                {customers?.length > 0 &&
+                  customers?.map((customer: any) => (
                     <TableRow key={customer?.id}>
                       {/* <TableCell className='overflow-hidden max-w-[100px] text-ellipsis'>
                         {customer?.pubkey ? (
@@ -71,7 +75,7 @@ export function CustomerSection({
                       </TableCell> */}
                       <TableCell>
                         <div
-                          className={`w-3 h-3 rounded-full ${orders && orders?.length > 0 && orders?.find((order: any) => order?.customer_id === customer?.id) ? 'bg-green-600' : 'bg-gray-200'}`}
+                          className={`w-3 h-3 rounded-full ${customer?.orders[0]?.paid ? 'bg-green-600' : 'bg-gray-200'}`}
                         ></div>
                       </TableCell>
                       <TableCell>

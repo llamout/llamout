@@ -63,8 +63,8 @@ export function CheckoutProvider({
               <div className='flex flex-col gap-4'>
                 <div className='flex justify-between items-center'>
                   <h1 className='font-semibold tracking-tighter text-balance'>{product?.name}</h1>
-                  {product?.price.length > 0 &&
-                    product?.price?.map((variant: any, index: any) => (
+                  {product?.prices?.length > 0 &&
+                    product?.prices?.map((variant: any, index: any) => (
                       <div className='flex items-center gap-1' key={index}>
                         {variant?.currency === 'SAT' ? (
                           <Satoshi className='size-4' />

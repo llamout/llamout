@@ -29,26 +29,14 @@ export function ProductSection({ store_id }: { store_id: string }) {
   }>({ image: '', name: '', description: '', prices: { price: null, currency: 'SAT' }, success_url: '' });
 
   const query = {
-    product: {
-      $: {
-        where: {
-          store_id,
-        },
-      },
-    },
-    price: {
-      $: {
-        where: {
-          store_id,
-        },
-      },
+    products: {
+      prices: {},
     },
   };
 
   const { isLoading, data } = db.useQuery(query);
 
-  const products = data?.product;
-  const prices = data?.price;
+  const products = data?.products;
 
   return (
     <div className='flex flex-col gap-4'>
@@ -101,7 +89,6 @@ export function ProductSection({ store_id }: { store_id: string }) {
         <div className='overflow-hidden flex flex-col gap-[1px] w-full rounded-lg border'>
           {/* Product */}
           {products?.map((product) => {
-            const price = prices?.find((price) => price?.product_id === product?.id);
             return (
               <div key={product?.id} className='flex justify-between items-center p-4 bg-card'>
                 <div className='flex items-center gap-4'>
@@ -114,14 +101,18 @@ export function ProductSection({ store_id }: { store_id: string }) {
                 </div>
                 <div className='flex items-center gap-4'>
                   <div className='flex items-center gap-1'>
-                    {price?.currency === 'SAT' ? <Satoshi className='size-4' /> : <span className='text-sm'>$</span>}
+                    {product?.prices[0]?.currency === 'SAT' ? (
+                      <Satoshi className='size-4' />
+                    ) : (
+                      <span className='text-sm'>$</span>
+                    )}
                     <div className='text-md font-semibold'>
-                      {formatBigNumbers(price?.price) || (
+                      {formatBigNumbers(product?.prices[0]?.price) || (
                         <Skeleton className='w-8 h-4 bg-gray-200 border rounded-full' />
                       )}
                     </div>
                     <span className='text-sm text-muted-foreground'>
-                      {price?.currency === 'SAT' ? 'SAT' : price?.currency}
+                      {product?.prices[0]?.currency === 'SAT' ? 'SAT' : product?.prices[0]?.currency}
                     </span>
                   </div>
                   <DropdownMenu>

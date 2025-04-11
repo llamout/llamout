@@ -273,7 +273,7 @@ export function CustomAccordion(props: CustomAccordion) {
   const [verify, setVerify] = useState<string>('');
   const [isPaid, setIsPaid] = useState<boolean>(false);
 
-  const price = product?.price[0]?.price * quantity;
+  const price = product?.prices[0]?.price * quantity;
 
   useEffect(() => {
     if (orderId && verify) {
@@ -352,11 +352,11 @@ export function CustomAccordion(props: CustomAccordion) {
                   // Relations
                   store_id: String(store?.id),
                   product_id: String(product?.id),
-                  price_id: String(product?.price[0]?.id),
+                  price_id: String(product?.prices[0]?.id),
                   customer_id: id,
                   // Data
-                  amount: Number(product?.price[0]?.price),
-                  currency: product?.price[0]?.currency,
+                  amount: Number(product?.prices[0]?.price),
+                  currency: product?.prices[0]?.currency,
                   quantity,
                 });
 
@@ -368,7 +368,7 @@ export function CustomAccordion(props: CustomAccordion) {
                 const data = await generatePayment({
                   lightningAddress: store?.lnaddress,
                   amount: price,
-                  currency: product?.price[0]?.currency,
+                  currency: product?.prices[0]?.currency,
                 });
 
                 setInvoice(data?.invoice?.pr);
