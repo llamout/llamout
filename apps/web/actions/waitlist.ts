@@ -71,6 +71,7 @@ export async function validateWaitlist({ email }: { email: string }): Promise<{ 
   };
 
   try {
+    // @ts-ignore
     const { waitlist } = await db.query(query);
 
     if (waitlist && waitlist.length > 0) {
