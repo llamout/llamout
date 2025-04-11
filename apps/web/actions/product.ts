@@ -28,22 +28,22 @@ export async function addProduct(props: {
   try {
     await db.transact(
       // @ts-ignore
-      db.tx.product[newId].update({
-        store_id,
+      db.tx.products[newId]
+        .update({
+          hash,
+          is_subscription: false,
+          // Data
+          image: image ?? null,
+          name,
+          description: description ?? null,
+          success_url: success_url ?? null,
 
-        // Data
-        image: image ?? null,
-        name: name ?? null,
-        description: description ?? null,
-        hash,
-        is_subscription: false,
-        success_url: success_url ?? null,
-
-        // Status
-        created_at: Date.now(),
-        updated_at: Date.now(),
-        status: 'active',
-      }),
+          // Status
+          status: 'active',
+          created_at: Date.now(),
+          updated_at: Date.now(),
+        })
+        .link({ store: store_id }),
     );
 
     await addPrice({
@@ -63,52 +63,50 @@ export async function addProduct(props: {
 
 export async function getProduct(hash: string): Promise<{ error: any; data: any }> {
   const queryProduct = {
-    product: {
+    products: {
       $: {
         limit: 1,
         where: {
           hash,
         },
       },
+      store: {},
+      prices: {},
     },
   };
 
   try {
-    const { product } = await db.query(queryProduct);
+    const { products } = await db.query(queryProduct);
 
-    if (!!product && product?.length === 0) {
+    if (!!products && products?.length === 0) {
       return { error: 'There is no product', data: null };
     }
 
-    const _product = product[0];
-
     // TO-DO
-    if (!_product?.id) {
-      return { error: 'Product ID is undefined', data: null };
-    }
+    // if (!_product?.id) {
+    //   return { error: 'Product ID is undefined', data: null };
+    // }
 
-    const query = {
-      price: {
-        $: {
-          where: {
-            product_id: _product?.id,
-          },
-        },
-      },
-      store: {
-        $: {
-          limit: 1,
-          where: {
-            id: _product?.store_id,
-          },
-        },
-      },
-    };
+    // const query = {
+    //   price: {
+    //     $: {
+    //       where: {
+    //         product_id: _product?.id,
+    //       },
+    //     },
+    //   },
+    //   store: {
+    //     $: {
+    //       limit: 1,
+    //     },
+    //   },
+    // };
 
-    const { store, price } = await db.query(query);
-    const _store = store[0];
+    // const { stores, prices } = await db.query(query);
+    // const _store = stores[0];
 
-    return { error: null, data: { product: { ..._product, price }, store: _store } };
+    // return { error: null, data: { product: { ..._product, prices }, store: _store } };
+    return { error: null, data: products[0] };
   } catch (error) {
     return { error, data: null };
   }
